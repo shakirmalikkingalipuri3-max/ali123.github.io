@@ -1,10 +1,175 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>My First Website</title>
+    <title>Balloon Game</title>
+    <style>
+        body { margin: 0; overflow: hidden; background: skyblue; }
+        #player {
+            position: absolute;
+            font-size: 50px;
+            bottom: 100px;
+            left: 50%;
+            transition: 0.05s;
+            user-select: none;
+        }
+        .obstacle {
+            position: absolute;
+            font-size: 35px;
+            top: -50px;
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            from { top: -50px; }
+            to { top: 110vh; }
+        }
+        #score {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 30px;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-family: Arial;
+            z-index: 10;
+        }
+        #gameOver {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            font-size: 40px;
+            font-family: Arial;
+            text-align: center;
+            z-index: 20;
+        }
+        #gameOver button {
+            font-size: 30px;
+            padding: 10px 30px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <h1>Assalam-o-Alaikum!</h1>
-    <p>Ye meri pehli GitHub website hai.</p>
+
+<div id="score">🎈 0</div>
+<div id="player">🎈</div>
+<div id="gameOver">
+    💥 Game Over!<br>
+    <span id="finalScore">0</span><br>
+    <button onclick="restartGame()">🔄 Restart</button>
+</div>
+
+<script>
+    const player = document.getElementById('player');
+    const scoreDisplay = document.getElementById('score');
+    const gameOverDiv = document.getElementById('gameOver');
+    const finalScore = document.getElementById('finalScore');
+    
+    let score = 0;
+    let gameRunning = true;
+    let speed = 2;
+    
+    // Mouse move - balloon follow karega
+    document.addEventListener('mousemove', (e) => {
+        if (!gameRunning) return;
+        let x = e.clientX - 30;
+        x = Math.max(0, Math.min(window.innerWidth - 60, x));
+        player.style.left = x + 'px';
+    });
+
+    // Chote balloons banayein
+    function createObstacle() {
+        if (!gameRunning) return;
+        
+        const emojis = ['🎈', '🟣', '🔵', '🟢', '🟡', '🟠'];
+        const obs = document.createElement('div');
+        obs.className = 'obstacle';
+        obs.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        obs.style.left = Math.random() * (window.innerWidth - 40) + 'px';
+        obs.style.fontSize = (25 + Math.random() * 30) + 'px';
+        obs.style.animationDuration = (3 + Math.random() * 2) + 's';
+        
+        document.body.appendChild(obs);
+        
+        // Check collision har frame
+        const checkCollision = setInterval(() => {
+            if (!gameRunning) {
+                clearInterval(checkCollision);
+                return;
+            }
+            
+            const pRect = player.getBoundingClientRect();
+            const oRect = obs.getBoundingClientRect();
+            
+            if (pRect.x < oRect.x + oRect.width &&
+                pRect.x + pRect.width > oRect.x &&
+                pRect.y < oRect.y + oRect.height &&
+                pRect.y + pRect.height > oRect.y) {
+                gameOver();
+                clearInterval(checkCollision);
+            }
+        }, 50);
+        
+        // Score increase jab balloon neeche se guzre
+        const checkScore = setInterval(() => {
+            if (!gameRunning) {
+                clearInterval(checkScore);
+                return;
+            }
+            const oRect = obs.getBoundingClientRect();
+            if (oRect.y > window.innerHeight) {
+                score++;
+                scoreDisplay.textContent = '🎈 ' + score;
+                clearInterval(checkScore);
+                // Speed slightly increase
+                if (score % 5 === 0) speed += 0.2;
+            }
+        }, 100);
+        
+        // Remove after fall
+        setTimeout(() => {
+            if (obs.parentNode) obs.remove();
+        }, 6000);
+    }
+
+    function gameOver() {
+        gameRunning = false;
+        finalScore.textContent = 'Score: ' + score;
+        gameOverDiv.style.display = 'block';
+        // Saare obstacles hatao
+        document.querySelectorAll('.obstacle').forEach(el => el.remove());
+    }
+
+    function restartGame() {
+        score = 0;
+        speed = 2;
+        gameRunning = true;
+        scoreDisplay.textContent = '🎈 0';
+        gameOverDiv.style.display = 'none';
+        // Purane obstacles hatao
+        document.querySelectorAll('.obstacle').forEach(el => el.remove());
+        // Naye balloons generate karna shuru karo
+        generateObstacles();
+    }
+
+    function generateObstacles() {
+        if (!gameRunning) return;
+        createObstacle();
+        // Random time par naya balloon aaye
+        const delay = 800 + Math.random() * 1200;
+        setTimeout(generateObstacles, delay);
+    }
+
+    // Game start
+    generateObstacles();
+</script>
+
 </body>
 </html>
