@@ -1,37 +1,60 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Balloon Game</title>
+    <title>Shakir's Balloon Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <style>
-        body { margin: 0; overflow: hidden; background: skyblue; }
+        * { margin: 0; padding: 0; }
+        body {
+            overflow: hidden;
+            background: linear-gradient(to bottom, #87CEEB, #E0F0FF);
+            height: 100vh;
+            touch-action: none;
+            font-family: Arial;
+        }
         #player {
             position: absolute;
-            font-size: 50px;
-            bottom: 100px;
+            bottom: 80px;
             left: 50%;
-            transition: 0.05s;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 150px;
             user-select: none;
+            pointer-events: none;
+            z-index: 10;
+            transition: none;
         }
-        .obstacle {
+        #player svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+            filter: drop-shadow(0 8px 20px rgba(0,0,0,0.3));
+        }
+        .fruit {
             position: absolute;
-            font-size: 35px;
-            top: -50px;
+            font-size: 45px;
+            top: -60px;
             animation: fall linear infinite;
+            user-select: none;
+            pointer-events: none;
+            z-index: 5;
         }
         @keyframes fall {
-            from { top: -50px; }
+            from { top: -80px; }
             to { top: 110vh; }
         }
         #score {
             position: absolute;
             top: 20px;
             left: 20px;
-            font-size: 30px;
-            background: white;
-            padding: 10px 20px;
-            border-radius: 10px;
-            font-family: Arial;
-            z-index: 10;
+            font-size: 32px;
+            background: rgba(255,255,255,0.9);
+            padding: 12px 25px;
+            border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            font-weight: bold;
+            z-index: 20;
+            color: #333;
         }
         #gameOver {
             display: none;
@@ -39,136 +62,265 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.85);
             color: white;
-            padding: 40px;
-            border-radius: 20px;
+            padding: 50px;
+            border-radius: 30px;
             font-size: 40px;
-            font-family: Arial;
             text-align: center;
-            z-index: 20;
+            z-index: 30;
+            min-width: 280px;
+            backdrop-filter: blur(5px);
+        }
+        #gameOver span {
+            font-size: 50px;
+            color: #FFD700;
         }
         #gameOver button {
-            font-size: 30px;
-            padding: 10px 30px;
+            font-size: 28px;
+            padding: 12px 40px;
             margin-top: 20px;
+            border: none;
+            border-radius: 50px;
+            background: #FF6B6B;
+            color: white;
+            font-weight: bold;
             cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(255,107,107,0.4);
+        }
+        #gameOver button:hover {
+            transform: scale(1.05);
+            background: #FF4757;
+        }
+        #touchArea {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            touch-action: none;
+        }
+        #instructions {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255,255,255,0.7);
+            font-size: 16px;
+            background: rgba(0,0,0,0.3);
+            padding: 8px 20px;
+            border-radius: 20px;
+            z-index: 15;
+            backdrop-filter: blur(2px);
+            white-space: nowrap;
+        }
+        @media (max-width: 600px) {
+            #player { width: 90px; height: 115px; bottom: 60px; }
+            .fruit { font-size: 35px; }
+            #score { font-size: 24px; padding: 8px 18px; }
+            #gameOver { padding: 30px; font-size: 30px; min-width: 200px; }
+            #gameOver button { font-size: 22px; padding: 10px 30px; }
         }
     </style>
 </head>
 <body>
 
-<div id="score">🎈 0</div>
-<div id="player">🎈</div>
+<div id="touchArea"></div>
+
+<div id="score">🍎 0</div>
+
+<div id="player">
+    <svg viewBox="0 0 120 150">
+        <!-- Balloon (Bada) -->
+        <ellipse cx="60" cy="55" rx="52" ry="65" fill="#FF4444" stroke="#CC0000" stroke-width="2"/>
+        <ellipse cx="60" cy="55" rx="52" ry="65" fill="url(#balloonGrad)"/>
+        <!-- Balloon shine -->
+        <ellipse cx="42" cy="40" rx="18" ry="22" fill="rgba(255,255,255,0.3)"/>
+        
+        <!-- Rope -->
+        <line x1="60" y1="115" x2="60" y2="135" stroke="#8B4513" stroke-width="2.5"/>
+        
+        <!-- Basket / Person sitting -->
+        <rect x="30" y="115" width="60" height="28" rx="5" fill="#8B4513" stroke="#5D3A1A" stroke-width="1.5"/>
+        <rect x="32" y="117" width="56" height="24" rx="4" fill="#A0522D"/>
+        
+        <!-- Person (body) -->
+        <rect x="48" y="90" width="24" height="28" rx="8" fill="#FFD93D"/>
+        <!-- Head -->
+        <circle cx="60" cy="82" r="14" fill="#FFD93D" stroke="#E8A317" stroke-width="1"/>
+        <!-- Eyes -->
+        <circle cx="55" cy="80" r="2.5" fill="#333"/>
+        <circle cx="65" cy="80" r="2.5" fill="#333"/>
+        <circle cx="55" cy="79" r="1" fill="white"/>
+        <circle cx="65" cy="79" r="1" fill="white"/>
+        <!-- Smile -->
+        <path d="M54 86 Q60 92 66 86" stroke="#333" stroke-width="1.5" fill="none"/>
+        <!-- Hair -->
+        <path d="M46 78 Q50 70 60 72 Q70 70 74 78" fill="#5D3A1A"/>
+        
+        <!-- Flag in hand -->
+        <line x1="72" y1="90" x2="95" y2="65" stroke="#5D3A1A" stroke-width="2"/>
+        <!-- Flag cloth -->
+        <polygon points="95,65 115,70 95,80" fill="#FF6B6B" stroke="#CC0000" stroke-width="1"/>
+        <!-- "Shakir" on flag -->
+        <text x="97" y="76" font-size="8" fill="white" font-weight="bold" font-family="Arial">Shakir</text>
+        
+        <!-- Gradients -->
+        <defs>
+            <radialGradient id="balloonGrad" cx="40%" cy="35%">
+                <stop offset="0%" style="stop-color:#FF6B6B"/>
+                <stop offset="100%" style="stop-color:#DD2222"/>
+            </radialGradient>
+        </defs>
+    </svg>
+</div>
+
 <div id="gameOver">
     💥 Game Over!<br>
     <span id="finalScore">0</span><br>
     <button onclick="restartGame()">🔄 Restart</button>
 </div>
 
+<div id="instructions">👆 Move your finger / mouse to control</div>
+
 <script>
     const player = document.getElementById('player');
     const scoreDisplay = document.getElementById('score');
     const gameOverDiv = document.getElementById('gameOver');
     const finalScore = document.getElementById('finalScore');
+    const touchArea = document.getElementById('touchArea');
     
     let score = 0;
     let gameRunning = true;
-    let speed = 2;
+    let playerX = window.innerWidth / 2 - 60;
+    let fruits = [];
+    let animationFrame;
     
-    // Mouse move - balloon follow karega
-    document.addEventListener('mousemove', (e) => {
+    // Position update function
+    function updatePlayer(x) {
         if (!gameRunning) return;
-        let x = e.clientX - 30;
-        x = Math.max(0, Math.min(window.innerWidth - 60, x));
-        player.style.left = x + 'px';
+        const maxX = window.innerWidth - 120;
+        playerX = Math.max(0, Math.min(maxX, x - 60));
+        player.style.left = playerX + 'px';
+        player.style.transform = 'translateX(0)';
+    }
+
+    // === MOUSE CONTROL ===
+    document.addEventListener('mousemove', (e) => {
+        updatePlayer(e.clientX);
     });
 
-    // Chote balloons banayein
-    function createObstacle() {
+    // === TOUCH CONTROL (PERFECT) ===
+    touchArea.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        const touch = e.touches[0];
+        updatePlayer(touch.clientX);
+    }, { passive: false });
+
+    touchArea.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+        const touch = e.touches[0];
+        updatePlayer(touch.clientX);
+    }, { passive: false });
+
+    // Window resize pe player ko adjust karo
+    window.addEventListener('resize', () => {
+        const maxX = window.innerWidth - 120;
+        playerX = Math.max(0, Math.min(maxX, playerX));
+        player.style.left = playerX + 'px';
+    });
+
+    // === FRUITS GENERATE ===
+    function createFruit() {
         if (!gameRunning) return;
         
-        const emojis = ['🎈', '🟣', '🔵', '🟢', '🟡', '🟠'];
-        const obs = document.createElement('div');
-        obs.className = 'obstacle';
-        obs.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-        obs.style.left = Math.random() * (window.innerWidth - 40) + 'px';
-        obs.style.fontSize = (25 + Math.random() * 30) + 'px';
-        obs.style.animationDuration = (3 + Math.random() * 2) + 's';
+        const fruitsList = ['🍎', '🍌', '🍇', '🍉', '🍓', '🍑', '🍒', '🥝'];
+        const fruit = document.createElement('div');
+        fruit.className = 'fruit';
+        fruit.textContent = fruitsList[Math.floor(Math.random() * fruitsList.length)];
+        fruit.style.left = Math.random() * (window.innerWidth - 60) + 'px';
+        fruit.style.fontSize = (35 + Math.random() * 30) + 'px';
+        fruit.style.animationDuration = (3 + Math.random() * 2.5) + 's';
         
-        document.body.appendChild(obs);
+        document.body.appendChild(fruit);
+        fruits.push(fruit);
         
-        // Check collision har frame
+        // Collision check
         const checkCollision = setInterval(() => {
             if (!gameRunning) {
                 clearInterval(checkCollision);
                 return;
             }
-            
             const pRect = player.getBoundingClientRect();
-            const oRect = obs.getBoundingClientRect();
+            const fRect = fruit.getBoundingClientRect();
             
-            if (pRect.x < oRect.x + oRect.width &&
-                pRect.x + pRect.width > oRect.x &&
-                pRect.y < oRect.y + oRect.height &&
-                pRect.y + pRect.height > oRect.y) {
+            if (pRect.x < fRect.x + fRect.width &&
+                pRect.x + pRect.width > fRect.x &&
+                pRect.y < fRect.y + fRect.height &&
+                pRect.y + pRect.height > fRect.y) {
                 gameOver();
                 clearInterval(checkCollision);
             }
-        }, 50);
+        }, 30);
         
-        // Score increase jab balloon neeche se guzre
+        // Score increment
         const checkScore = setInterval(() => {
             if (!gameRunning) {
                 clearInterval(checkScore);
                 return;
             }
-            const oRect = obs.getBoundingClientRect();
-            if (oRect.y > window.innerHeight) {
+            const fRect = fruit.getBoundingClientRect();
+            if (fRect.y > window.innerHeight + 50) {
                 score++;
-                scoreDisplay.textContent = '🎈 ' + score;
+                scoreDisplay.textContent = '🍎 ' + score;
                 clearInterval(checkScore);
-                // Speed slightly increase
-                if (score % 5 === 0) speed += 0.2;
             }
         }, 100);
         
-        // Remove after fall
+        // Cleanup
         setTimeout(() => {
-            if (obs.parentNode) obs.remove();
-        }, 6000);
+            if (fruit.parentNode) {
+                fruit.remove();
+                const idx = fruits.indexOf(fruit);
+                if (idx > -1) fruits.splice(idx, 1);
+            }
+        }, 7000);
     }
 
     function gameOver() {
         gameRunning = false;
         finalScore.textContent = 'Score: ' + score;
         gameOverDiv.style.display = 'block';
-        // Saare obstacles hatao
-        document.querySelectorAll('.obstacle').forEach(el => el.remove());
+        fruits.forEach(f => { if (f.parentNode) f.remove(); });
+        fruits = [];
+        if (animationFrame) cancelAnimationFrame(animationFrame);
     }
 
     function restartGame() {
         score = 0;
-        speed = 2;
         gameRunning = true;
-        scoreDisplay.textContent = '🎈 0';
+        scoreDisplay.textContent = '🍎 0';
         gameOverDiv.style.display = 'none';
-        // Purane obstacles hatao
-        document.querySelectorAll('.obstacle').forEach(el => el.remove());
-        // Naye balloons generate karna shuru karo
-        generateObstacles();
+        fruits.forEach(f => { if (f.parentNode) f.remove(); });
+        fruits = [];
+        player.style.left = (window.innerWidth / 2 - 60) + 'px';
+        playerX = window.innerWidth / 2 - 60;
+        generateFruits();
     }
 
-    function generateObstacles() {
+    function generateFruits() {
         if (!gameRunning) return;
-        createObstacle();
-        // Random time par naya balloon aaye
-        const delay = 800 + Math.random() * 1200;
-        setTimeout(generateObstacles, delay);
+        createFruit();
+        const delay = 700 + Math.random() * 1300;
+        setTimeout(generateFruits, delay);
     }
 
-    // Game start
-    generateObstacles();
+    // Start game
+    player.style.left = (window.innerWidth / 2 - 60) + 'px';
+    playerX = window.innerWidth / 2 - 60;
+    generateFruits();
 </script>
 
 </body>
