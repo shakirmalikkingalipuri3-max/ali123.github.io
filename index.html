@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Shakir Runner 🏃</title>
+    <title>Shakir vs Dragon 🐉</title>
     <style>
         * {
             margin: 0;
@@ -12,191 +12,288 @@
         }
         body {
             overflow: hidden;
-            background: #2d3436;
+            background: #1a1a2e;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             font-family: 'Arial', sans-serif;
             touch-action: none;
+            user-select: none;
         }
         #gameWrapper {
             position: relative;
             width: 100%;
-            max-width: 500px;
+            max-width: 450px;
             height: 100vh;
-            max-height: 700px;
-            background: linear-gradient(180deg, #74b9ff 0%, #a8d8ea 40%, #dfe6e9 70%, #b2bec3 100%);
+            max-height: 750px;
+            background: linear-gradient(180deg, #0a3d2e 0%, #1a5a3a 30%, #2d7a4a 60%, #1a4a2e 100%);
             overflow: hidden;
-            border-radius: 0px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+            border-radius: 0;
         }
-        /* Ground */
+
+        /* Jungle Trees Background */
+        .tree {
+            position: absolute;
+            font-size: 80px;
+            opacity: 0.4;
+            z-index: 1;
+        }
+        .tree:nth-child(1) { left: 5%; bottom: 20%; font-size: 100px; }
+        .tree:nth-child(2) { right: 5%; bottom: 30%; font-size: 120px; }
+        .tree:nth-child(3) { left: 15%; bottom: 45%; font-size: 70px; }
+        .tree:nth-child(4) { right: 15%; bottom: 50%; font-size: 90px; }
+        .tree:nth-child(5) { left: 45%; bottom: 10%; font-size: 60px; }
+
+        /* Ground - Jungle Path */
         #ground {
             position: absolute;
             bottom: 0;
             width: 100%;
-            height: 80px;
-            background: #00b894;
-            border-top: 4px solid #00a381;
+            height: 100px;
+            background: linear-gradient(180deg, #3d2b1f, #2a1a10);
+            border-top: 4px solid #4a3520;
+            z-index: 2;
         }
-        #groundLine {
+        #groundPath {
             position: absolute;
-            bottom: 40px;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50%;
+            height: 60px;
+            background: linear-gradient(180deg, #8B7355, #6d5a3d);
+            border-radius: 30px 30px 0 0;
+            border: 2px solid #5a4a30;
+        }
+        #groundPath::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 0;
             width: 200%;
             height: 3px;
-            background: repeating-linear-gradient(90deg, #fff 0px, #fff 30px, transparent 30px, transparent 60px);
-            animation: scrollGround 1.5s linear infinite;
+            background: repeating-linear-gradient(90deg, #a08060 0px, #a08060 40px, transparent 40px, transparent 80px);
+            animation: scrollPath 1.2s linear infinite;
         }
-        @keyframes scrollGround {
+        @keyframes scrollPath {
             from { transform: translateX(0); }
             to { transform: translateX(-50%); }
         }
 
-        /* Player - Shakir with Balloon */
+        /* === PLAYER - Superhero Shakir === */
         #player {
             position: absolute;
-            bottom: 80px;
-            left: 60px;
-            width: 80px;
-            height: 110px;
+            bottom: 100px;
+            left: 30%;
+            width: 70px;
+            height: 100px;
             z-index: 10;
-            transition: none;
             transform: translateY(0);
+            transition: none;
         }
         #player.jumping {
-            animation: jump 0.6s ease-out;
+            animation: superJump 0.8s cubic-bezier(0.2, 0.8, 0.4, 1);
         }
-        @keyframes jump {
-            0% { transform: translateY(0); }
-            40% { transform: translateY(-130px); }
-            100% { transform: translateY(0); }
+        @keyframes superJump {
+            0% { transform: translateY(0) scale(1); }
+            30% { transform: translateY(-180px) scale(1.1); }
+            60% { transform: translateY(-200px) scale(1.05); }
+            100% { transform: translateY(0) scale(1); }
         }
         #player svg {
             width: 100%;
             height: 100%;
             display: block;
-            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.2));
+            filter: drop-shadow(0 4px 20px rgba(255,215,0,0.3));
         }
 
-        /* Obstacles */
+        /* === DRAGON === */
+        #dragon {
+            position: absolute;
+            bottom: 100px;
+            right: -150px;
+            width: 150px;
+            height: 120px;
+            z-index: 8;
+            animation: dragonChase 2.8s linear infinite;
+            filter: drop-shadow(0 0 30px rgba(255,50,0,0.5));
+        }
+        @keyframes dragonChase {
+            from { right: -150px; }
+            to { right: calc(100% + 150px); }
+        }
+        #dragon svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        /* Dragon fire */
+        #dragonFire {
+            position: absolute;
+            font-size: 30px;
+            right: -20px;
+            top: 40px;
+            animation: fireBlast 0.3s infinite alternate;
+            z-index: 9;
+        }
+        @keyframes fireBlast {
+            from { transform: scale(0.8); opacity: 0.7; }
+            to { transform: scale(1.3); opacity: 1; }
+        }
+
+        /* === OBSTACLES - Jungle rocks & trees === */
         .obstacle {
             position: absolute;
-            bottom: 80px;
+            bottom: 100px;
             font-size: 50px;
             z-index: 5;
-            animation: moveObstacle 2.5s linear forwards;
+            animation: moveObstacle 2.2s linear forwards;
         }
         @keyframes moveObstacle {
             from { right: -60px; }
             to { right: calc(100% + 60px); }
         }
 
-        /* Clouds */
-        .cloud {
+        /* === COLLECTIBLES - Coins === */
+        .coin {
             position: absolute;
-            font-size: 50px;
-            opacity: 0.7;
-            animation: floatCloud 20s linear infinite;
-            z-index: 1;
+            bottom: 160px;
+            font-size: 35px;
+            z-index: 6;
+            animation: moveCoin 2.5s linear forwards;
         }
-        @keyframes floatCloud {
-            from { transform: translateX(-100px); }
-            to { transform: translateX(calc(100vw + 100px)); }
+        @keyframes moveCoin {
+            from { right: -40px; }
+            to { right: calc(100% + 40px); }
+        }
+        .coin.floating {
+            animation: floatCoin 0.5s ease-in-out infinite alternate;
+        }
+        @keyframes floatCoin {
+            from { transform: translateY(-5px); }
+            to { transform: translateY(5px); }
         }
 
-        /* Score */
+        /* === UI === */
         #score {
             position: absolute;
             top: 20px;
             right: 20px;
-            font-size: 28px;
+            font-size: 26px;
             font-weight: bold;
-            color: #2d3436;
-            background: rgba(255,255,255,0.9);
-            padding: 10px 22px;
+            color: #FFD700;
+            background: rgba(0,0,0,0.7);
+            padding: 10px 20px;
             border-radius: 30px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
             z-index: 20;
             backdrop-filter: blur(5px);
+            border: 2px solid rgba(255,215,0,0.3);
+            text-shadow: 0 0 20px rgba(255,215,0,0.3);
         }
+        #score span { color: #fff; }
+
         #highScore {
             position: absolute;
             top: 20px;
             left: 20px;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
-            color: #2d3436;
-            background: rgba(255,255,255,0.85);
-            padding: 8px 18px;
+            color: #aaa;
+            background: rgba(0,0,0,0.6);
+            padding: 8px 16px;
             border-radius: 30px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             z-index: 20;
             backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        #highScore span { color: #FFD700; }
+
+        /* Dragon warning */
+        #dragonWarning {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ff0000;
+            font-size: 40px;
+            font-weight: bold;
+            text-shadow: 0 0 40px rgba(255,0,0,0.8);
+            z-index: 15;
+            opacity: 0;
+            animation: warningPulse 1s ease-in-out infinite;
+            pointer-events: none;
+        }
+        @keyframes warningPulse {
+            0%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.1); }
         }
 
-        /* Game Over */
+        /* === GAME OVER === */
         #gameOver {
             display: none;
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(0,0,0,0.88);
+            background: rgba(0,0,0,0.92);
             color: white;
             padding: 40px 35px;
             border-radius: 30px;
             text-align: center;
             z-index: 30;
-            min-width: 250px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.1);
+            min-width: 280px;
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255,50,0,0.3);
+            box-shadow: 0 0 60px rgba(255,0,0,0.2);
         }
         #gameOver h1 {
-            font-size: 38px;
-            margin-bottom: 10px;
+            font-size: 36px;
+            color: #ff4444;
+            text-shadow: 0 0 30px rgba(255,0,0,0.5);
+            margin-bottom: 5px;
         }
+        #gameOver .dragonIcon { font-size: 60px; display: block; margin: -10px 0; }
         #gameOver .finalScore {
-            font-size: 50px;
-            color: #fdcb6e;
+            font-size: 48px;
+            color: #FFD700;
             font-weight: bold;
             margin: 10px 0;
         }
         #gameOver .highScore {
-            font-size: 20px;
-            color: #dfe6e9;
+            font-size: 18px;
+            color: #aaa;
             margin-bottom: 20px;
         }
         #gameOver button {
             font-size: 24px;
-            padding: 14px 45px;
+            padding: 14px 50px;
             border: none;
             border-radius: 50px;
-            background: linear-gradient(135deg, #00b894, #00a381);
+            background: linear-gradient(135deg, #ff6b35, #ff4500);
             color: white;
             font-weight: bold;
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 6px 25px rgba(0,184,148,0.4);
+            box-shadow: 0 6px 30px rgba(255,69,0,0.4);
         }
         #gameOver button:hover {
             transform: scale(1.05);
-            box-shadow: 0 8px 35px rgba(0,184,148,0.6);
+            box-shadow: 0 8px 40px rgba(255,69,0,0.6);
         }
-        #gameOver button:active {
-            transform: scale(0.95);
-        }
+        #gameOver button:active { transform: scale(0.95); }
 
         /* Instructions */
         #instructions {
             position: absolute;
-            bottom: 100px;
+            bottom: 115px;
             left: 50%;
             transform: translateX(-50%);
-            color: rgba(0,0,0,0.5);
-            font-size: 14px;
-            background: rgba(255,255,255,0.6);
-            padding: 6px 18px;
+            color: rgba(255,255,255,0.4);
+            font-size: 13px;
+            background: rgba(0,0,0,0.4);
+            padding: 5px 16px;
             border-radius: 20px;
             z-index: 15;
             backdrop-filter: blur(2px);
@@ -204,93 +301,144 @@
             font-weight: bold;
         }
 
-        /* Responsive */
         @media (max-width: 600px) {
-            #player { width: 60px; height: 85px; left: 30px; }
+            #player { width: 55px; height: 80px; left: 25%; }
+            #dragon { width: 110px; height: 90px; }
             .obstacle { font-size: 40px; }
-            #score { font-size: 22px; padding: 6px 16px; }
-            #highScore { font-size: 15px; padding: 5px 14px; }
+            .coin { font-size: 28px; }
+            #score { font-size: 20px; padding: 6px 14px; }
+            #highScore { font-size: 13px; padding: 5px 12px; }
             #gameOver { padding: 30px 25px; min-width: 200px; }
-            #gameOver h1 { font-size: 30px; }
-            #gameOver .finalScore { font-size: 40px; }
+            #gameOver h1 { font-size: 28px; }
+            #gameOver .finalScore { font-size: 38px; }
             #gameOver button { font-size: 20px; padding: 12px 35px; }
-            #instructions { font-size: 12px; bottom: 90px; }
+            #instructions { font-size: 11px; bottom: 105px; }
+            #dragonFire { font-size: 22px; right: -15px; top: 30px; }
         }
     </style>
 </head>
 <body>
 
 <div id="gameWrapper">
-    <!-- Background Clouds -->
-    <div class="cloud" style="top:10%; left:-10%; animation-duration:25s;">☁️</div>
-    <div class="cloud" style="top:25%; left:-30%; animation-duration:30s; font-size:70px;">☁️</div>
-    <div class="cloud" style="top:5%; left:-50%; animation-duration:22s;">☁️</div>
+    
+    <!-- Jungle Trees -->
+    <div class="tree">🌳</div>
+    <div class="tree">🌴</div>
+    <div class="tree">🌳</div>
+    <div class="tree">🌴</div>
+    <div class="tree">🌳</div>
 
     <!-- Ground -->
     <div id="ground">
-        <div id="groundLine"></div>
+        <div id="groundPath"></div>
     </div>
+
+    <!-- Dragon Warning -->
+    <div id="dragonWarning">🐉 DRAGON!</div>
 
     <!-- Score -->
     <div id="highScore">🏆 <span id="highScoreVal">0</span></div>
-    <div id="score">⭐ <span id="scoreVal">0</span></div>
+    <div id="score">🪙 <span id="scoreVal">0</span></div>
 
-    <!-- Player -->
+    <!-- === PLAYER - Superhero Shakir === -->
     <div id="player">
-        <svg viewBox="0 0 80 110">
-            <!-- Balloon -->
-            <ellipse cx="40" cy="35" rx="36" ry="45" fill="#FF4444" stroke="#CC0000" stroke-width="1.5"/>
-            <ellipse cx="40" cy="35" rx="36" ry="45" fill="url(#balloonGrad)"/>
-            <ellipse cx="28" cy="26" rx="12" ry="16" fill="rgba(255,255,255,0.25)"/>
-            
-            <!-- Rope -->
-            <line x1="40" y1="75" x2="40" y2="90" stroke="#8B4513" stroke-width="2"/>
-            
-            <!-- Basket / Seat -->
-            <rect x="22" y="90" width="36" height="18" rx="4" fill="#8B4513" stroke="#5D3A1A" stroke-width="1"/>
-            
-            <!-- Person Body -->
-            <rect x="32" y="68" width="16" height="22" rx="6" fill="#FFD93D"/>
+        <svg viewBox="0 0 70 100">
+            <!-- Cape -->
+            <path d="M35 40 L10 75 L25 78 L35 50 L45 78 L60 75 Z" fill="#cc0000" opacity="0.8"/>
+            <!-- Body - Superhero suit -->
+            <rect x="25" y="40" width="20" height="35" rx="8" fill="#1a5276"/>
+            <rect x="22" y="42" width="26" height="8" rx="4" fill="#f1c40f"/>
+            <!-- Belt -->
+            <rect x="25" y="68" width="20" height="6" rx="2" fill="#f1c40f"/>
             <!-- Head -->
-            <circle cx="40" cy="62" r="11" fill="#FFD93D" stroke="#E8A317" stroke-width="0.8"/>
+            <circle cx="35" cy="30" r="14" fill="#f5cba7" stroke="#e0a97a" stroke-width="1"/>
+            <!-- Mask -->
+            <path d="M24 26 Q28 22 35 24 Q42 22 46 26 Q44 30 35 31 Q26 30 24 26 Z" fill="#2c3e50"/>
             <!-- Eyes -->
-            <circle cx="36" cy="60" r="2" fill="#333"/>
-            <circle cx="44" cy="60" r="2" fill="#333"/>
-            <circle cx="36" cy="59" r="0.8" fill="white"/>
-            <circle cx="44" cy="59" r="0.8" fill="white"/>
-            <!-- Smile -->
-            <path d="M35 65 Q40 70 45 65" stroke="#333" stroke-width="1.2" fill="none"/>
-            <!-- Hair -->
-            <path d="M31 58 Q35 52 40 53 Q45 52 49 58" fill="#5D3A1A"/>
-            
-            <!-- Flag in hand -->
-            <line x1="48" y1="68" x2="62" y2="52" stroke="#5D3A1A" stroke-width="1.8"/>
-            <polygon points="62,52 76,56 62,64" fill="#FF6B6B" stroke="#CC0000" stroke-width="0.8"/>
-            <text x="64" y="59" font-size="7" fill="white" font-weight="bold" font-family="Arial">Shakir</text>
+            <circle cx="30" cy="28" r="3" fill="white"/>
+            <circle cx="40" cy="28" r="3" fill="white"/>
+            <circle cx="30" cy="28" r="1.5" fill="#2c3e50"/>
+            <circle cx="40" cy="28" r="1.5" fill="#2c3e50"/>
+            <!-- Superhero emblem -->
+            <text x="28" y="58" font-size="12" fill="#f1c40f" font-weight="bold" font-family="Arial">S</text>
+            <!-- Legs -->
+            <rect x="27" y="75" width="6" height="15" rx="3" fill="#1a5276"/>
+            <rect x="37" y="75" width="6" height="15" rx="3" fill="#1a5276"/>
+            <!-- Boots -->
+            <rect x="25" y="87" width="10" height="8" rx="3" fill="#c0392b"/>
+            <rect x="35" y="87" width="10" height="8" rx="3" fill="#c0392b"/>
+            <!-- Glowing effect -->
+            <ellipse cx="35" cy="50" rx="25" ry="35" fill="none" stroke="#f1c40f" stroke-width="1" opacity="0.3"/>
+        </svg>
+    </div>
+
+    <!-- === DRAGON === -->
+    <div id="dragon">
+        <svg viewBox="0 0 150 120">
+            <!-- Dragon Body -->
+            <ellipse cx="75" cy="60" rx="55" ry="35" fill="#27ae60"/>
+            <ellipse cx="75" cy="60" rx="55" ry="35" fill="url(#dragonGrad)"/>
+            <!-- Dragon Neck -->
+            <path d="M120 45 Q135 30 130 15" stroke="#27ae60" stroke-width="18" fill="none"/>
+            <!-- Dragon Head -->
+            <circle cx="128" cy="15" r="20" fill="#2ecc71"/>
+            <circle cx="128" cy="15" r="20" fill="url(#dragonHeadGrad)"/>
+            <!-- Eyes -->
+            <circle cx="135" cy="10" r="6" fill="#ffff00"/>
+            <circle cx="135" cy="10" r="3" fill="#ff0000"/>
+            <circle cx="125" cy="10" r="5" fill="#ffff00"/>
+            <circle cx="125" cy="10" r="2.5" fill="#ff0000"/>
+            <!-- Dragon Teeth -->
+            <path d="M118 22 L120 28 L124 22 L128 28 L132 22 L136 28 L140 22" stroke="white" stroke-width="2" fill="white"/>
+            <!-- Spikes -->
+            <path d="M60 28 L65 18 L70 28 L75 16 L80 28 L85 18 L90 28" fill="#e74c3c"/>
+            <!-- Wings -->
+            <path d="M60 45 Q30 15 50 10 Q65 15 60 45" fill="#2ecc71" opacity="0.6"/>
+            <path d="M50 45 Q20 25 40 20 Q55 25 50 45" fill="#27ae60" opacity="0.5"/>
+            <!-- Tail -->
+            <path d="M20 55 Q5 50 10 40 Q15 35 25 45" stroke="#27ae60" stroke-width="8" fill="none"/>
+            <path d="M10 40 Q5 35 12 30" stroke="#e74c3c" stroke-width="6" fill="none"/>
+            <!-- Legs -->
+            <rect x="50" y="85" width="10" height="25" rx="4" fill="#1e8449"/>
+            <rect x="85" y="85" width="10" height="25" rx="4" fill="#1e8449"/>
+            <!-- Claws -->
+            <path d="M48 110 L45 115 L50 110" fill="#f1c40f"/>
+            <path d="M54 110 L57 115 L58 110" fill="#f1c40f"/>
+            <path d="M83 110 L80 115 L85 110" fill="#f1c40f"/>
+            <path d="M89 110 L92 115 L93 110" fill="#f1c40f"/>
             
             <defs>
-                <radialGradient id="balloonGrad" cx="35%" cy="30%">
-                    <stop offset="0%" style="stop-color:#FF6B6B"/>
-                    <stop offset="100%" style="stop-color:#DD2222"/>
+                <radialGradient id="dragonGrad" cx="40%" cy="30%">
+                    <stop offset="0%" style="stop-color:#2ecc71"/>
+                    <stop offset="100%" style="stop-color:#1a7a3a"/>
+                </radialGradient>
+                <radialGradient id="dragonHeadGrad" cx="40%" cy="30%">
+                    <stop offset="0%" style="stop-color:#58d68d"/>
+                    <stop offset="100%" style="stop-color:#229954"/>
                 </radialGradient>
             </defs>
         </svg>
+        <div id="dragonFire">🔥</div>
     </div>
 
     <!-- Game Over -->
     <div id="gameOver">
-        <h1>💥 Game Over</h1>
-        <div class="finalScore"><span id="finalScore">0</span></div>
+        <span class="dragonIcon">🐉</span>
+        <h1>Eaten!</h1>
+        <div class="finalScore">🪙 <span id="finalScore">0</span></div>
         <div class="highScore">🏆 Best: <span id="finalHighScore">0</span></div>
-        <button onclick="restartGame()">🔄 Play Again</button>
+        <button onclick="restartGame()">🔄 Run Again</button>
     </div>
 
-    <div id="instructions">👆 Tap / Space to Jump</div>
+    <div id="instructions">👆 Tap / Space to SUPER JUMP!</div>
 </div>
 
 <script>
     // === DOM REFS ===
     const player = document.getElementById('player');
+    const dragon = document.getElementById('dragon');
+    const dragonFire = document.getElementById('dragonFire');
+    const dragonWarning = document.getElementById('dragonWarning');
     const scoreVal = document.getElementById('scoreVal');
     const highScoreVal = document.getElementById('highScoreVal');
     const finalScore = document.getElementById('finalScore');
@@ -300,26 +448,41 @@
 
     // === GAME STATE ===
     let score = 0;
-    let highScore = parseInt(localStorage.getItem('shakirRunnerHigh')) || 0;
+    let highScore = parseInt(localStorage.getItem('shakirDragonHigh')) || 0;
     let gameRunning = true;
     let isJumping = false;
     let obstacleInterval;
     let scoreInterval;
-    let gameSpeed = 2.2;
-    let frameId;
+    let coinInterval;
+    let gameSpeed = 2.5;
+    let dragonSpeed = 2.8;
 
     highScoreVal.textContent = highScore;
 
-    // === JUMP FUNCTION ===
+    // === SUPER JUMP ===
     function jump() {
         if (!gameRunning || isJumping) return;
         isJumping = true;
         player.classList.add('jumping');
+        // Ground shake effect
+        gameWrapper.style.animation = 'shakeGround 0.3s ease';
+        setTimeout(() => gameWrapper.style.animation = '', 300);
         setTimeout(() => {
             player.classList.remove('jumping');
             isJumping = false;
-        }, 600);
+        }, 800);
     }
+
+    // Ground shake
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes shakeGround {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+    `;
+    document.head.appendChild(style);
 
     // === CONTROLS ===
     document.addEventListener('keydown', (e) => {
@@ -339,29 +502,23 @@
         jump();
     });
 
-    // === CREATE OBSTACLE ===
+    // === CREATE OBSTACLES (Jungle obstacles) ===
     function createObstacle() {
         if (!gameRunning) return;
-        
-        const obstacles = ['🌵', '🪨', '📦', '🧱', '🪹'];
+        const obsList = ['🪵', '🌿', '🗿', '🧱', '🌲'];
         const obs = document.createElement('div');
         obs.className = 'obstacle';
-        obs.textContent = obstacles[Math.floor(Math.random() * obstacles.length)];
+        obs.textContent = obsList[Math.floor(Math.random() * obsList.length)];
         obs.style.fontSize = (40 + Math.random() * 25) + 'px';
-        obs.style.animationDuration = (1.8 + Math.random() * 0.8) / (gameSpeed / 2.2) + 's';
-        
+        obs.style.animationDuration = (1.8 + Math.random() * 0.6) / (gameSpeed / 2.5) + 's';
+        obs.style.bottom = (80 + Math.random() * 20) + 'px';
         gameWrapper.appendChild(obs);
 
         const checkCollision = setInterval(() => {
-            if (!gameRunning) {
-                clearInterval(checkCollision);
-                return;
-            }
+            if (!gameRunning) { clearInterval(checkCollision); return; }
             const pRect = player.getBoundingClientRect();
             const oRect = obs.getBoundingClientRect();
-            
-            // Collision detection with margin
-            const margin = 15;
+            const margin = 20;
             if (pRect.x < oRect.x + oRect.width - margin &&
                 pRect.x + pRect.width - margin > oRect.x &&
                 pRect.y < oRect.y + oRect.height - margin &&
@@ -371,73 +528,29 @@
             }
         }, 30);
 
-        // Remove after animation
         setTimeout(() => {
             if (obs.parentNode) obs.remove();
-        }, 4000 / (gameSpeed / 2.2) + 500);
+        }, 4000 / (gameSpeed / 2.5) + 500);
     }
 
-    // === SCORE INCREASE ===
-    function startScoreTimer() {
-        scoreInterval = setInterval(() => {
-            if (gameRunning) {
-                score++;
-                scoreVal.textContent = score;
-                // Speed gradually increases
-                if (score % 15 === 0) {
-                    gameSpeed += 0.15;
-                }
-            }
-        }, 100);
-    }
+    // === COINS ===
+    function createCoin() {
+        if (!gameRunning || Math.random() > 0.4) return;
+        const coin = document.createElement('div');
+        coin.className = 'coin floating';
+        coin.textContent = '🪙';
+        coin.style.fontSize = (30 + Math.random() * 15) + 'px';
+        coin.style.animationDuration = (2.0 + Math.random() * 0.8) / (gameSpeed / 2.5) + 's';
+        coin.style.bottom = (140 + Math.random() * 60) + 'px';
+        gameWrapper.appendChild(coin);
 
-    // === OBSTACLE GENERATOR ===
-    function startObstacleGenerator() {
-        createObstacle();
-        obstacleInterval = setTimeout(() => {
-            if (gameRunning) startObstacleGenerator();
-        }, 1200 / (gameSpeed / 2.2) + Math.random() * 400);
-    }
-
-    // === END GAME ===
-    function endGame() {
-        gameRunning = false;
-        gameOverDiv.style.display = 'block';
-        finalScore.textContent = score;
-        
-        if (score > highScore) {
-            highScore = score;
-            localStorage.setItem('shakirRunnerHigh', highScore);
-            highScoreVal.textContent = highScore;
-        }
-        finalHighScore.textContent = highScore;
-        
-        clearInterval(scoreInterval);
-        clearTimeout(obstacleInterval);
-        // Remove remaining obstacles
-        document.querySelectorAll('.obstacle').forEach(el => el.remove());
-    }
-
-    // === RESTART ===
-    function restartGame() {
-        gameRunning = true;
-        score = 0;
-        gameSpeed = 2.2;
-        isJumping = false;
-        scoreVal.textContent = '0';
-        gameOverDiv.style.display = 'none';
-        player.classList.remove('jumping');
-        
-        document.querySelectorAll('.obstacle').forEach(el => el.remove());
-        
-        startScoreTimer();
-        startObstacleGenerator();
-    }
-
-    // === START GAME ===
-    startScoreTimer();
-    startObstacleGenerator();
-</script>
-
-</body>
-    </html>
+        const checkCollect = setInterval(() => {
+            if (!gameRunning) { clearInterval(checkCollect); return; }
+            const pRect = player.getBoundingClientRect();
+            const cRect = coin.getBoundingClientRect();
+            if (pRect.x < cRect.x + cRect.width - 10 &&
+                pRect.x + pRect.width - 10 > cRect.x &&
+                pRect.y < cRect.y + cRect.height - 10 &&
+                pRect.y + pRect.height - 10 > cRect.y) {
+                score += 5;
+     
