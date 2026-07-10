@@ -3,554 +3,530 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Shakir vs Dragon 🐉</title>
+    <title>Shakir Runner 🏃</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
-            overflow: hidden;
-            background: #1a1a2e;
+            background: #0a0a1a;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            font-family: 'Arial', sans-serif;
+            font-family: Arial, sans-serif;
             touch-action: none;
             user-select: none;
+            overflow: hidden;
         }
-        #gameWrapper {
+
+        #game {
             position: relative;
             width: 100%;
-            max-width: 450px;
+            max-width: 420px;
             height: 100vh;
             max-height: 750px;
-            background: linear-gradient(180deg, #0a3d2e 0%, #1a5a3a 30%, #2d7a4a 60%, #1a4a2e 100%);
+            background: linear-gradient(180deg, #0f2027, #203a43, #2c5364);
             overflow: hidden;
-            box-shadow: 0 0 50px rgba(0,0,0,0.8);
             border-radius: 0;
+            box-shadow: 0 0 60px rgba(0, 0, 0, 0.9);
         }
 
-        /* Jungle Trees Background */
-        .tree {
-            position: absolute;
-            font-size: 80px;
-            opacity: 0.4;
-            z-index: 1;
-        }
-        .tree:nth-child(1) { left: 5%; bottom: 20%; font-size: 100px; }
-        .tree:nth-child(2) { right: 5%; bottom: 30%; font-size: 120px; }
-        .tree:nth-child(3) { left: 15%; bottom: 45%; font-size: 70px; }
-        .tree:nth-child(4) { right: 15%; bottom: 50%; font-size: 90px; }
-        .tree:nth-child(5) { left: 45%; bottom: 10%; font-size: 60px; }
-
-        /* Ground - Jungle Path */
+        /* ===== GROUND ===== */
         #ground {
             position: absolute;
             bottom: 0;
             width: 100%;
-            height: 100px;
-            background: linear-gradient(180deg, #3d2b1f, #2a1a10);
+            height: 90px;
+            background: linear-gradient(180deg, #2d1f0e, #1a1008);
             border-top: 4px solid #4a3520;
             z-index: 2;
         }
-        #groundPath {
+
+        #groundLine {
             position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 50%;
-            height: 60px;
-            background: linear-gradient(180deg, #8B7355, #6d5a3d);
-            border-radius: 30px 30px 0 0;
-            border: 2px solid #5a4a30;
-        }
-        #groundPath::before {
-            content: '';
-            position: absolute;
-            top: 10px;
-            left: 0;
+            top: 30px;
             width: 200%;
-            height: 3px;
-            background: repeating-linear-gradient(90deg, #a08060 0px, #a08060 40px, transparent 40px, transparent 80px);
-            animation: scrollPath 1.2s linear infinite;
-        }
-        @keyframes scrollPath {
-            from { transform: translateX(0); }
-            to { transform: translateX(-50%); }
+            height: 4px;
+            background: repeating-linear-gradient(90deg, #6d5a3d 0px, #6d5a3d 40px, transparent 40px, transparent 80px);
+            animation: scrollGround 1.2s linear infinite;
         }
 
-        /* === PLAYER - Superhero Shakir === */
+        @keyframes scrollGround {
+            from {
+                transform: translateX(0);
+            }
+            to {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* ===== PLAYER ===== */
         #player {
             position: absolute;
-            bottom: 100px;
-            left: 30%;
-            width: 70px;
-            height: 100px;
+            bottom: 90px;
+            left: 40px;
+            width: 65px;
+            height: 90px;
             z-index: 10;
-            transform: translateY(0);
             transition: none;
         }
-        #player.jumping {
-            animation: superJump 0.8s cubic-bezier(0.2, 0.8, 0.4, 1);
+
+        #player.jump {
+            animation: jumpAnim 0.6s cubic-bezier(0.2, 0.8, 0.3, 1);
         }
-        @keyframes superJump {
-            0% { transform: translateY(0) scale(1); }
-            30% { transform: translateY(-180px) scale(1.1); }
-            60% { transform: translateY(-200px) scale(1.05); }
-            100% { transform: translateY(0) scale(1); }
+
+        @keyframes jumpAnim {
+            0% {
+                transform: translateY(0) scale(1);
+            }
+            35% {
+                transform: translateY(-160px) scale(1.1);
+            }
+            70% {
+                transform: translateY(-180px) scale(1.05);
+            }
+            100% {
+                transform: translateY(0) scale(1);
+            }
         }
+
         #player svg {
             width: 100%;
             height: 100%;
             display: block;
-            filter: drop-shadow(0 4px 20px rgba(255,215,0,0.3));
+            filter: drop-shadow(0 4px 20px rgba(255, 215, 0, 0.2));
         }
 
-        /* === DRAGON === */
-        #dragon {
+        /* ===== OBSTACLES ===== */
+        .obs {
             position: absolute;
-            bottom: 100px;
-            right: -150px;
-            width: 150px;
-            height: 120px;
-            z-index: 8;
-            animation: dragonChase 2.8s linear infinite;
-            filter: drop-shadow(0 0 30px rgba(255,50,0,0.5));
-        }
-        @keyframes dragonChase {
-            from { right: -150px; }
-            to { right: calc(100% + 150px); }
-        }
-        #dragon svg {
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
-        /* Dragon fire */
-        #dragonFire {
-            position: absolute;
-            font-size: 30px;
-            right: -20px;
-            top: 40px;
-            animation: fireBlast 0.3s infinite alternate;
-            z-index: 9;
-        }
-        @keyframes fireBlast {
-            from { transform: scale(0.8); opacity: 0.7; }
-            to { transform: scale(1.3); opacity: 1; }
-        }
-
-        /* === OBSTACLES - Jungle rocks & trees === */
-        .obstacle {
-            position: absolute;
-            bottom: 100px;
-            font-size: 50px;
+            bottom: 90px;
+            font-size: 45px;
             z-index: 5;
-            animation: moveObstacle 2.2s linear forwards;
-        }
-        @keyframes moveObstacle {
-            from { right: -60px; }
-            to { right: calc(100% + 60px); }
+            animation: moveObs 2s linear forwards;
         }
 
-        /* === COLLECTIBLES - Coins === */
+        @keyframes moveObs {
+            from {
+                right: -60px;
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            to {
+                right: calc(100% + 60px);
+                opacity: 0;
+            }
+        }
+
+        /* ===== COINS ===== */
         .coin {
             position: absolute;
-            bottom: 160px;
-            font-size: 35px;
+            bottom: 150px;
+            font-size: 30px;
             z-index: 6;
-            animation: moveCoin 2.5s linear forwards;
-        }
-        @keyframes moveCoin {
-            from { right: -40px; }
-            to { right: calc(100% + 40px); }
-        }
-        .coin.floating {
-            animation: floatCoin 0.5s ease-in-out infinite alternate;
-        }
-        @keyframes floatCoin {
-            from { transform: translateY(-5px); }
-            to { transform: translateY(5px); }
+            animation: moveCoin 2.2s linear forwards;
         }
 
-        /* === UI === */
+        @keyframes moveCoin {
+            from {
+                right: -40px;
+                transform: rotate(0deg);
+            }
+            to {
+                right: calc(100% + 40px);
+                transform: rotate(720deg);
+            }
+        }
+
+        /* ===== SCORE ===== */
         #score {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 26px;
-            font-weight: bold;
+            top: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.7);
             color: #FFD700;
-            background: rgba(0,0,0,0.7);
-            padding: 10px 20px;
+            padding: 8px 18px;
             border-radius: 30px;
+            font-size: 24px;
+            font-weight: bold;
             z-index: 20;
+            border: 2px solid rgba(255, 215, 0, 0.2);
             backdrop-filter: blur(5px);
-            border: 2px solid rgba(255,215,0,0.3);
-            text-shadow: 0 0 20px rgba(255,215,0,0.3);
         }
-        #score span { color: #fff; }
+
+        #score span {
+            color: white;
+        }
 
         #highScore {
             position: absolute;
-            top: 20px;
-            left: 20px;
-            font-size: 16px;
-            font-weight: bold;
+            top: 15px;
+            left: 15px;
+            background: rgba(0, 0, 0, 0.6);
             color: #aaa;
-            background: rgba(0,0,0,0.6);
-            padding: 8px 16px;
+            padding: 6px 14px;
             border-radius: 30px;
+            font-size: 14px;
             z-index: 20;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        #highScore span { color: #FFD700; }
-
-        /* Dragon warning */
-        #dragonWarning {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: #ff0000;
-            font-size: 40px;
-            font-weight: bold;
-            text-shadow: 0 0 40px rgba(255,0,0,0.8);
-            z-index: 15;
-            opacity: 0;
-            animation: warningPulse 1s ease-in-out infinite;
-            pointer-events: none;
-        }
-        @keyframes warningPulse {
-            0%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
-            50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.1); }
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* === GAME OVER === */
+        #highScore span {
+            color: #FFD700;
+        }
+
+        /* ===== GAME OVER ===== */
         #gameOver {
             display: none;
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(0,0,0,0.92);
-            color: white;
-            padding: 40px 35px;
-            border-radius: 30px;
+            background: rgba(0, 0, 0, 0.92);
+            padding: 35px 30px;
+            border-radius: 25px;
             text-align: center;
             z-index: 30;
-            min-width: 280px;
-            backdrop-filter: blur(15px);
-            border: 2px solid rgba(255,50,0,0.3);
-            box-shadow: 0 0 60px rgba(255,0,0,0.2);
+            min-width: 260px;
+            border: 2px solid rgba(255, 50, 0, 0.2);
+            backdrop-filter: blur(10px);
         }
+
         #gameOver h1 {
-            font-size: 36px;
+            font-size: 32px;
             color: #ff4444;
-            text-shadow: 0 0 30px rgba(255,0,0,0.5);
-            margin-bottom: 5px;
         }
-        #gameOver .dragonIcon { font-size: 60px; display: block; margin: -10px 0; }
-        #gameOver .finalScore {
-            font-size: 48px;
+
+        #gameOver .final {
+            font-size: 44px;
             color: #FFD700;
             font-weight: bold;
-            margin: 10px 0;
+            margin: 8px 0;
         }
-        #gameOver .highScore {
-            font-size: 18px;
+
+        #gameOver .best {
+            font-size: 16px;
             color: #aaa;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
+
         #gameOver button {
-            font-size: 24px;
-            padding: 14px 50px;
+            font-size: 22px;
+            padding: 12px 40px;
             border: none;
             border-radius: 50px;
-            background: linear-gradient(135deg, #ff6b35, #ff4500);
+            background: linear-gradient(135deg, #ff6b35, #e63900);
             color: white;
             font-weight: bold;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 6px 30px rgba(255,69,0,0.4);
+            transition: transform 0.2s;
+            box-shadow: 0 6px 30px rgba(255, 69, 0, 0.3);
         }
-        #gameOver button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 40px rgba(255,69,0,0.6);
-        }
-        #gameOver button:active { transform: scale(0.95); }
 
-        /* Instructions */
-        #instructions {
+        #gameOver button:active {
+            transform: scale(0.95);
+        }
+
+        /* ===== INSTRUCTIONS ===== */
+        #tip {
             position: absolute;
-            bottom: 115px;
+            bottom: 105px;
             left: 50%;
             transform: translateX(-50%);
-            color: rgba(255,255,255,0.4);
-            font-size: 13px;
-            background: rgba(0,0,0,0.4);
-            padding: 5px 16px;
-            border-radius: 20px;
+            color: rgba(255, 255, 255, 0.2);
+            font-size: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 4px 14px;
+            border-radius: 12px;
             z-index: 15;
-            backdrop-filter: blur(2px);
             white-space: nowrap;
-            font-weight: bold;
+            letter-spacing: 1px;
         }
 
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 600px) {
-            #player { width: 55px; height: 80px; left: 25%; }
-            #dragon { width: 110px; height: 90px; }
-            .obstacle { font-size: 40px; }
-            .coin { font-size: 28px; }
-            #score { font-size: 20px; padding: 6px 14px; }
-            #highScore { font-size: 13px; padding: 5px 12px; }
-            #gameOver { padding: 30px 25px; min-width: 200px; }
-            #gameOver h1 { font-size: 28px; }
-            #gameOver .finalScore { font-size: 38px; }
-            #gameOver button { font-size: 20px; padding: 12px 35px; }
-            #instructions { font-size: 11px; bottom: 105px; }
-            #dragonFire { font-size: 22px; right: -15px; top: 30px; }
+            #player {
+                width: 50px;
+                height: 70px;
+                left: 30px;
+            }
+            .obs {
+                font-size: 35px;
+            }
+            .coin {
+                font-size: 24px;
+            }
+            #score {
+                font-size: 20px;
+                padding: 6px 14px;
+            }
+            #highScore {
+                font-size: 12px;
+                padding: 4px 10px;
+            }
+            #gameOver {
+                padding: 25px 20px;
+                min-width: 200px;
+            }
+            #gameOver h1 {
+                font-size: 26px;
+            }
+            #gameOver .final {
+                font-size: 36px;
+            }
+            #gameOver button {
+                font-size: 18px;
+                padding: 10px 30px;
+            }
+            #ground {
+                height: 70px;
+            }
+            #groundLine {
+                top: 25px;
+            }
+            #tip {
+                font-size: 10px;
+                bottom: 85px;
+            }
         }
     </style>
 </head>
 <body>
 
-<div id="gameWrapper">
-    
-    <!-- Jungle Trees -->
-    <div class="tree">🌳</div>
-    <div class="tree">🌴</div>
-    <div class="tree">🌳</div>
-    <div class="tree">🌴</div>
-    <div class="tree">🌳</div>
+    <div id="game">
 
-    <!-- Ground -->
-    <div id="ground">
-        <div id="groundPath"></div>
+        <!-- Ground -->
+        <div id="ground">
+            <div id="groundLine"></div>
+        </div>
+
+        <!-- Score -->
+        <div id="highScore">🏆 <span id="highVal">0</span></div>
+        <div id="score">⭐ <span id="scoreVal">0</span></div>
+
+        <!-- Player - Shakir -->
+        <div id="player">
+            <svg viewBox="0 0 65 90">
+                <!-- Cape -->
+                <path d="M32 35 L8 65 L20 68 L32 48 L44 68 L56 65 Z" fill="#cc0000" opacity="0.7"/>
+                <!-- Body -->
+                <rect x="20" y="35" width="24" height="28" rx="6" fill="#1a5276"/>
+                <rect x="18" y="37" width="28" height="6" rx="3" fill="#f1c40f"/>
+                <rect x="20" y="55" width="24" height="5" rx="2" fill="#f1c40f"/>
+                <!-- Head -->
+                <circle cx="32" cy="25" r="12" fill="#f5cba7"/>
+                <!-- Mask -->
+                <path d="M23 21 Q27 18 32 19 Q37 18 41 21 Q39 24 32 25 Q25 24 23 21 Z" fill="#2c3e50"/>
+                <!-- Eyes -->
+                <circle cx="28" cy="22" r="2.5" fill="white"/>
+                <circle cx="36" cy="22" r="2.5" fill="white"/>
+                <circle cx="28" cy="22" r="1.2" fill="#2c3e50"/>
+                <circle cx="36" cy="22" r="1.2" fill="#2c3e50"/>
+                <!-- Emblem -->
+                <text x="24" y="50" font-size="10" fill="#f1c40f" font-weight="bold" font-family="Arial">S</text>
+                <!-- Legs -->
+                <rect x="22" y="63" width="6" height="12" rx="2" fill="#1a5276"/>
+                <rect x="36" y="63" width="6" height="12" rx="2" fill="#1a5276"/>
+                <!-- Boots -->
+                <rect x="20" y="73" width="9" height="7" rx="2" fill="#c0392b"/>
+                <rect x="35" y="73" width="9" height="7" rx="2" fill="#c0392b"/>
+            </svg>
+        </div>
+
+        <!-- Game Over -->
+        <div id="gameOver">
+            <h1>💥 Game Over</h1>
+            <div class="final">⭐ <span id="finalScore">0</span></div>
+            <div class="best">🏆 Best: <span id="finalHigh">0</span></div>
+            <button onclick="restartGame()">🔄 Play Again</button>
+        </div>
+
+        <div id="tip">👆 Tap / Click to Jump</div>
     </div>
 
-    <!-- Dragon Warning -->
-    <div id="dragonWarning">🐉 DRAGON!</div>
+    <script>
+        // === DOM ===
+        const player = document.getElementById('player');
+        const scoreVal = document.getElementById('scoreVal');
+        const highVal = document.getElementById('highVal');
+        const finalScore = document.getElementById('finalScore');
+        const finalHigh = document.getElementById('finalHigh');
+        const gameOverDiv = document.getElementById('gameOver');
+        const game = document.getElementById('game');
 
-    <!-- Score -->
-    <div id="highScore">🏆 <span id="highScoreVal">0</span></div>
-    <div id="score">🪙 <span id="scoreVal">0</span></div>
+        // === STATE ===
+        let score = 0;
+        let high = parseInt(localStorage.getItem('shakirRunHigh')) || 0;
+        let running = true;
+        let jumping = false;
+        let speed = 2.2;
+        let obsInterval, coinInterval, scoreTimer;
 
-    <!-- === PLAYER - Superhero Shakir === -->
-    <div id="player">
-        <svg viewBox="0 0 70 100">
-            <!-- Cape -->
-            <path d="M35 40 L10 75 L25 78 L35 50 L45 78 L60 75 Z" fill="#cc0000" opacity="0.8"/>
-            <!-- Body - Superhero suit -->
-            <rect x="25" y="40" width="20" height="35" rx="8" fill="#1a5276"/>
-            <rect x="22" y="42" width="26" height="8" rx="4" fill="#f1c40f"/>
-            <!-- Belt -->
-            <rect x="25" y="68" width="20" height="6" rx="2" fill="#f1c40f"/>
-            <!-- Head -->
-            <circle cx="35" cy="30" r="14" fill="#f5cba7" stroke="#e0a97a" stroke-width="1"/>
-            <!-- Mask -->
-            <path d="M24 26 Q28 22 35 24 Q42 22 46 26 Q44 30 35 31 Q26 30 24 26 Z" fill="#2c3e50"/>
-            <!-- Eyes -->
-            <circle cx="30" cy="28" r="3" fill="white"/>
-            <circle cx="40" cy="28" r="3" fill="white"/>
-            <circle cx="30" cy="28" r="1.5" fill="#2c3e50"/>
-            <circle cx="40" cy="28" r="1.5" fill="#2c3e50"/>
-            <!-- Superhero emblem -->
-            <text x="28" y="58" font-size="12" fill="#f1c40f" font-weight="bold" font-family="Arial">S</text>
-            <!-- Legs -->
-            <rect x="27" y="75" width="6" height="15" rx="3" fill="#1a5276"/>
-            <rect x="37" y="75" width="6" height="15" rx="3" fill="#1a5276"/>
-            <!-- Boots -->
-            <rect x="25" y="87" width="10" height="8" rx="3" fill="#c0392b"/>
-            <rect x="35" y="87" width="10" height="8" rx="3" fill="#c0392b"/>
-            <!-- Glowing effect -->
-            <ellipse cx="35" cy="50" rx="25" ry="35" fill="none" stroke="#f1c40f" stroke-width="1" opacity="0.3"/>
-        </svg>
-    </div>
+        highVal.textContent = high;
 
-    <!-- === DRAGON === -->
-    <div id="dragon">
-        <svg viewBox="0 0 150 120">
-            <!-- Dragon Body -->
-            <ellipse cx="75" cy="60" rx="55" ry="35" fill="#27ae60"/>
-            <ellipse cx="75" cy="60" rx="55" ry="35" fill="url(#dragonGrad)"/>
-            <!-- Dragon Neck -->
-            <path d="M120 45 Q135 30 130 15" stroke="#27ae60" stroke-width="18" fill="none"/>
-            <!-- Dragon Head -->
-            <circle cx="128" cy="15" r="20" fill="#2ecc71"/>
-            <circle cx="128" cy="15" r="20" fill="url(#dragonHeadGrad)"/>
-            <!-- Eyes -->
-            <circle cx="135" cy="10" r="6" fill="#ffff00"/>
-            <circle cx="135" cy="10" r="3" fill="#ff0000"/>
-            <circle cx="125" cy="10" r="5" fill="#ffff00"/>
-            <circle cx="125" cy="10" r="2.5" fill="#ff0000"/>
-            <!-- Dragon Teeth -->
-            <path d="M118 22 L120 28 L124 22 L128 28 L132 22 L136 28 L140 22" stroke="white" stroke-width="2" fill="white"/>
-            <!-- Spikes -->
-            <path d="M60 28 L65 18 L70 28 L75 16 L80 28 L85 18 L90 28" fill="#e74c3c"/>
-            <!-- Wings -->
-            <path d="M60 45 Q30 15 50 10 Q65 15 60 45" fill="#2ecc71" opacity="0.6"/>
-            <path d="M50 45 Q20 25 40 20 Q55 25 50 45" fill="#27ae60" opacity="0.5"/>
-            <!-- Tail -->
-            <path d="M20 55 Q5 50 10 40 Q15 35 25 45" stroke="#27ae60" stroke-width="8" fill="none"/>
-            <path d="M10 40 Q5 35 12 30" stroke="#e74c3c" stroke-width="6" fill="none"/>
-            <!-- Legs -->
-            <rect x="50" y="85" width="10" height="25" rx="4" fill="#1e8449"/>
-            <rect x="85" y="85" width="10" height="25" rx="4" fill="#1e8449"/>
-            <!-- Claws -->
-            <path d="M48 110 L45 115 L50 110" fill="#f1c40f"/>
-            <path d="M54 110 L57 115 L58 110" fill="#f1c40f"/>
-            <path d="M83 110 L80 115 L85 110" fill="#f1c40f"/>
-            <path d="M89 110 L92 115 L93 110" fill="#f1c40f"/>
-            
-            <defs>
-                <radialGradient id="dragonGrad" cx="40%" cy="30%">
-                    <stop offset="0%" style="stop-color:#2ecc71"/>
-                    <stop offset="100%" style="stop-color:#1a7a3a"/>
-                </radialGradient>
-                <radialGradient id="dragonHeadGrad" cx="40%" cy="30%">
-                    <stop offset="0%" style="stop-color:#58d68d"/>
-                    <stop offset="100%" style="stop-color:#229954"/>
-                </radialGradient>
-            </defs>
-        </svg>
-        <div id="dragonFire">🔥</div>
-    </div>
-
-    <!-- Game Over -->
-    <div id="gameOver">
-        <span class="dragonIcon">🐉</span>
-        <h1>Eaten!</h1>
-        <div class="finalScore">🪙 <span id="finalScore">0</span></div>
-        <div class="highScore">🏆 Best: <span id="finalHighScore">0</span></div>
-        <button onclick="restartGame()">🔄 Run Again</button>
-    </div>
-
-    <div id="instructions">👆 Tap / Space to SUPER JUMP!</div>
-</div>
-
-<script>
-    // === DOM REFS ===
-    const player = document.getElementById('player');
-    const dragon = document.getElementById('dragon');
-    const dragonFire = document.getElementById('dragonFire');
-    const dragonWarning = document.getElementById('dragonWarning');
-    const scoreVal = document.getElementById('scoreVal');
-    const highScoreVal = document.getElementById('highScoreVal');
-    const finalScore = document.getElementById('finalScore');
-    const finalHighScore = document.getElementById('finalHighScore');
-    const gameOverDiv = document.getElementById('gameOver');
-    const gameWrapper = document.getElementById('gameWrapper');
-
-    // === GAME STATE ===
-    let score = 0;
-    let highScore = parseInt(localStorage.getItem('shakirDragonHigh')) || 0;
-    let gameRunning = true;
-    let isJumping = false;
-    let obstacleInterval;
-    let scoreInterval;
-    let coinInterval;
-    let gameSpeed = 2.5;
-    let dragonSpeed = 2.8;
-
-    highScoreVal.textContent = highScore;
-
-    // === SUPER JUMP ===
-    function jump() {
-        if (!gameRunning || isJumping) return;
-        isJumping = true;
-        player.classList.add('jumping');
-        // Ground shake effect
-        gameWrapper.style.animation = 'shakeGround 0.3s ease';
-        setTimeout(() => gameWrapper.style.animation = '', 300);
-        setTimeout(() => {
-            player.classList.remove('jumping');
-            isJumping = false;
-        }, 800);
-    }
-
-    // Ground shake
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes shakeGround {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
+        // === JUMP ===
+        function jump() {
+            if (!running || jumping) return;
+            jumping = true;
+            player.classList.add('jump');
+            setTimeout(() => {
+                player.classList.remove('jump');
+                jumping = false;
+            }, 600);
         }
-    `;
-    document.head.appendChild(style);
 
-    // === CONTROLS ===
-    document.addEventListener('keydown', (e) => {
-        if (e.code === 'Space' || e.key === ' ') {
+        // === CONTROLS ===
+        game.addEventListener('touchstart', (e) => {
             e.preventDefault();
             jump();
-        }
-    });
+        }, { passive: false });
 
-    gameWrapper.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        jump();
-    }, { passive: false });
+        game.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            jump();
+        });
 
-    gameWrapper.addEventListener('mousedown', (e) => {
-        e.preventDefault();
-        jump();
-    });
-
-    // === CREATE OBSTACLES (Jungle obstacles) ===
-    function createObstacle() {
-        if (!gameRunning) return;
-        const obsList = ['🪵', '🌿', '🗿', '🧱', '🌲'];
-        const obs = document.createElement('div');
-        obs.className = 'obstacle';
-        obs.textContent = obsList[Math.floor(Math.random() * obsList.length)];
-        obs.style.fontSize = (40 + Math.random() * 25) + 'px';
-        obs.style.animationDuration = (1.8 + Math.random() * 0.6) / (gameSpeed / 2.5) + 's';
-        obs.style.bottom = (80 + Math.random() * 20) + 'px';
-        gameWrapper.appendChild(obs);
-
-        const checkCollision = setInterval(() => {
-            if (!gameRunning) { clearInterval(checkCollision); return; }
-            const pRect = player.getBoundingClientRect();
-            const oRect = obs.getBoundingClientRect();
-            const margin = 20;
-            if (pRect.x < oRect.x + oRect.width - margin &&
-                pRect.x + pRect.width - margin > oRect.x &&
-                pRect.y < oRect.y + oRect.height - margin &&
-                pRect.y + pRect.height - margin > oRect.y) {
-                endGame();
-                clearInterval(checkCollision);
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' || e.key === ' ') {
+                e.preventDefault();
+                jump();
             }
-        }, 30);
+        });
 
-        setTimeout(() => {
-            if (obs.parentNode) obs.remove();
-        }, 4000 / (gameSpeed / 2.5) + 500);
-    }
+        // === CREATE OBSTACLE ===
+        function createObstacle() {
+            if (!running) return;
+            const list = ['🌵', '🪨', '🧱', '🪹', '🌲'];
+            const obs = document.createElement('div');
+            obs.className = 'obs';
+            obs.textContent = list[Math.floor(Math.random() * list.length)];
+            obs.style.fontSize = (35 + Math.random() * 25) + 'px';
+            obs.style.animationDuration = (1.8 + Math.random() * 0.6) / (speed / 2.2) + 's';
+            game.appendChild(obs);
 
-    // === COINS ===
-    function createCoin() {
-        if (!gameRunning || Math.random() > 0.4) return;
-        const coin = document.createElement('div');
-        coin.className = 'coin floating';
-        coin.textContent = '🪙';
-        coin.style.fontSize = (30 + Math.random() * 15) + 'px';
-        coin.style.animationDuration = (2.0 + Math.random() * 0.8) / (gameSpeed / 2.5) + 's';
-        coin.style.bottom = (140 + Math.random() * 60) + 'px';
-        gameWrapper.appendChild(coin);
+            const check = setInterval(() => {
+                if (!running) { clearInterval(check); return; }
+                const p = player.getBoundingClientRect();
+                const o = obs.getBoundingClientRect();
+                if (p.x < o.x + o.width - 18 &&
+                    p.x + p.width - 18 > o.x &&
+                    p.y < o.y + o.height - 18 &&
+                    p.y + p.height - 18 > o.y) {
+                    endGame();
+                    clearInterval(check);
+                }
+            }, 30);
 
-        const checkCollect = setInterval(() => {
-            if (!gameRunning) { clearInterval(checkCollect); return; }
-            const pRect = player.getBoundingClientRect();
-            const cRect = coin.getBoundingClientRect();
-            if (pRect.x < cRect.x + cRect.width - 10 &&
-                pRect.x + pRect.width - 10 > cRect.x &&
-                pRect.y < cRect.y + cRect.height - 10 &&
-                pRect.y + pRect.height - 10 > cRect.y) {
-                score += 5;
-     
+            setTimeout(() => {
+                if (obs.parentNode) obs.remove();
+            }, 5000 / (speed / 2.2) + 500);
+        }
+
+        // === CREATE COIN ===
+        function createCoin() {
+            if (!running || Math.random() > 0.4) return;
+            const coin = document.createElement('div');
+            coin.className = 'coin';
+            coin.textContent = '🪙';
+            coin.style.fontSize = (25 + Math.random() * 15) + 'px';
+            coin.style.animationDuration = (2.0 + Math.random() * 0.6) / (speed / 2.2) + 's';
+            coin.style.bottom = (130 + Math.random() * 60) + 'px';
+            game.appendChild(coin);
+
+            const check = setInterval(() => {
+                if (!running) { clearInterval(check); return; }
+                const p = player.getBoundingClientRect();
+                const c = coin.getBoundingClientRect();
+                if (p.x < c.x + c.width - 10 &&
+                    p.x + p.width - 10 > c.x &&
+                    p.y < c.y + c.height - 10 &&
+                    p.y + p.height - 10 > c.y) {
+                    score += 5;
+                    scoreVal.textContent = score;
+                    if (coin.parentNode) coin.remove();
+                    clearInterval(check);
+                    // Sparkle
+                    const spark = document.createElement('div');
+                    spark.textContent = '✨';
+                    spark.style.cssText = 'position:absolute; left:' + c.left + 'px; top:' + c.top + 'px; font-size:24px; z-index:25; pointer-events:none;';
+                    document.body.appendChild(spark);
+                    setTimeout(() => spark.remove(), 300);
+                }
+            }, 30);
+
+            setTimeout(() => {
+                if (coin.parentNode) coin.remove();
+            }, 5000 / (speed / 2.2) + 500);
+        }
+
+        // === GAME LOOPS ===
+        function startScore() {
+            scoreTimer = setInterval(() => {
+                if (running) {
+                    score++;
+                    scoreVal.textContent = score;
+                    if (score % 15 === 0) {
+                        speed += 0.15;
+                    }
+                }
+            }, 80);
+        }
+
+        function startObs() {
+            if (!running) return;
+            createObstacle();
+            obsInterval = setTimeout(startObs, 900 / (speed / 2.2) + Math.random() * 400);
+        }
+
+        function startCoin() {
+            if (!running) return;
+            createCoin();
+            coinInterval = setTimeout(startCoin, 1200 / (speed / 2.2) + Math.random() * 500);
+        }
+
+        // === END GAME ===
+        function endGame() {
+            running = false;
+            gameOverDiv.style.display = 'block';
+            finalScore.textContent = score;
+            if (score > high) {
+                high = score;
+                localStorage.setItem('shakirRunHigh', high);
+                highVal.textContent = high;
+            }
+            finalHigh.textContent = high;
+            clearInterval(scoreTimer);
+            clearTimeout(obsInterval);
+            clearTimeout(coinInterval);
+            document.querySelectorAll('.obs, .coin').forEach(el => el.remove());
+        }
+
+        // === RESTART ===
+        function restartGame() {
+            running = true;
+            score = 0;
+            speed = 2.2;
+            jumping = false;
+            scoreVal.textContent = '0';
+            gameOverDiv.style.display = 'none';
+            player.classList.remove('jump');
+            document.querySelectorAll('.obs, .coin').forEach(el => el.remove());
+            startScore();
+            startObs();
+            startCoin();
+        }
+
+        // === START ===
+        startScore();
+        startObs();
+        startCoin();
+    </script>
+
+</body>
+    </html>
