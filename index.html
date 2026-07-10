@@ -1,327 +1,443 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Shakir's Balloon Game</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Shakir Runner 🏃</title>
     <style>
-        * { margin: 0; padding: 0; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
             overflow: hidden;
-            background: linear-gradient(to bottom, #87CEEB, #E0F0FF);
+            background: #2d3436;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             height: 100vh;
+            font-family: 'Arial', sans-serif;
             touch-action: none;
-            font-family: Arial;
         }
+        #gameWrapper {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            height: 100vh;
+            max-height: 700px;
+            background: linear-gradient(180deg, #74b9ff 0%, #a8d8ea 40%, #dfe6e9 70%, #b2bec3 100%);
+            overflow: hidden;
+            border-radius: 0px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        /* Ground */
+        #ground {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 80px;
+            background: #00b894;
+            border-top: 4px solid #00a381;
+        }
+        #groundLine {
+            position: absolute;
+            bottom: 40px;
+            width: 200%;
+            height: 3px;
+            background: repeating-linear-gradient(90deg, #fff 0px, #fff 30px, transparent 30px, transparent 60px);
+            animation: scrollGround 1.5s linear infinite;
+        }
+        @keyframes scrollGround {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        /* Player - Shakir with Balloon */
         #player {
             position: absolute;
             bottom: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 120px;
-            height: 150px;
-            user-select: none;
-            pointer-events: none;
+            left: 60px;
+            width: 80px;
+            height: 110px;
             z-index: 10;
             transition: none;
+            transform: translateY(0);
+        }
+        #player.jumping {
+            animation: jump 0.6s ease-out;
+        }
+        @keyframes jump {
+            0% { transform: translateY(0); }
+            40% { transform: translateY(-130px); }
+            100% { transform: translateY(0); }
         }
         #player svg {
             width: 100%;
             height: 100%;
             display: block;
-            filter: drop-shadow(0 8px 20px rgba(0,0,0,0.3));
+            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.2));
         }
-        .fruit {
+
+        /* Obstacles */
+        .obstacle {
             position: absolute;
-            font-size: 45px;
-            top: -60px;
-            animation: fall linear infinite;
-            user-select: none;
-            pointer-events: none;
+            bottom: 80px;
+            font-size: 50px;
             z-index: 5;
+            animation: moveObstacle 2.5s linear forwards;
         }
-        @keyframes fall {
-            from { top: -80px; }
-            to { top: 110vh; }
+        @keyframes moveObstacle {
+            from { right: -60px; }
+            to { right: calc(100% + 60px); }
         }
+
+        /* Clouds */
+        .cloud {
+            position: absolute;
+            font-size: 50px;
+            opacity: 0.7;
+            animation: floatCloud 20s linear infinite;
+            z-index: 1;
+        }
+        @keyframes floatCloud {
+            from { transform: translateX(-100px); }
+            to { transform: translateX(calc(100vw + 100px)); }
+        }
+
+        /* Score */
         #score {
             position: absolute;
             top: 20px;
-            left: 20px;
-            font-size: 32px;
-            background: rgba(255,255,255,0.9);
-            padding: 12px 25px;
-            border-radius: 30px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            right: 20px;
+            font-size: 28px;
             font-weight: bold;
+            color: #2d3436;
+            background: rgba(255,255,255,0.9);
+            padding: 10px 22px;
+            border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
             z-index: 20;
-            color: #333;
+            backdrop-filter: blur(5px);
         }
+        #highScore {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #2d3436;
+            background: rgba(255,255,255,0.85);
+            padding: 8px 18px;
+            border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            z-index: 20;
+            backdrop-filter: blur(5px);
+        }
+
+        /* Game Over */
         #gameOver {
             display: none;
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(0,0,0,0.85);
+            background: rgba(0,0,0,0.88);
             color: white;
-            padding: 50px;
+            padding: 40px 35px;
             border-radius: 30px;
-            font-size: 40px;
             text-align: center;
             z-index: 30;
-            min-width: 280px;
-            backdrop-filter: blur(5px);
+            min-width: 250px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
         }
-        #gameOver span {
+        #gameOver h1 {
+            font-size: 38px;
+            margin-bottom: 10px;
+        }
+        #gameOver .finalScore {
             font-size: 50px;
-            color: #FFD700;
+            color: #fdcb6e;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        #gameOver .highScore {
+            font-size: 20px;
+            color: #dfe6e9;
+            margin-bottom: 20px;
         }
         #gameOver button {
-            font-size: 28px;
-            padding: 12px 40px;
-            margin-top: 20px;
+            font-size: 24px;
+            padding: 14px 45px;
             border: none;
             border-radius: 50px;
-            background: #FF6B6B;
+            background: linear-gradient(135deg, #00b894, #00a381);
             color: white;
             font-weight: bold;
             cursor: pointer;
-            transition: 0.3s;
-            box-shadow: 0 4px 15px rgba(255,107,107,0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 6px 25px rgba(0,184,148,0.4);
         }
         #gameOver button:hover {
             transform: scale(1.05);
-            background: #FF4757;
+            box-shadow: 0 8px 35px rgba(0,184,148,0.6);
         }
-        #touchArea {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            touch-action: none;
+        #gameOver button:active {
+            transform: scale(0.95);
         }
+
+        /* Instructions */
         #instructions {
             position: absolute;
-            bottom: 20px;
+            bottom: 100px;
             left: 50%;
             transform: translateX(-50%);
-            color: rgba(255,255,255,0.7);
-            font-size: 16px;
-            background: rgba(0,0,0,0.3);
-            padding: 8px 20px;
+            color: rgba(0,0,0,0.5);
+            font-size: 14px;
+            background: rgba(255,255,255,0.6);
+            padding: 6px 18px;
             border-radius: 20px;
             z-index: 15;
             backdrop-filter: blur(2px);
             white-space: nowrap;
+            font-weight: bold;
         }
+
+        /* Responsive */
         @media (max-width: 600px) {
-            #player { width: 90px; height: 115px; bottom: 60px; }
-            .fruit { font-size: 35px; }
-            #score { font-size: 24px; padding: 8px 18px; }
-            #gameOver { padding: 30px; font-size: 30px; min-width: 200px; }
-            #gameOver button { font-size: 22px; padding: 10px 30px; }
+            #player { width: 60px; height: 85px; left: 30px; }
+            .obstacle { font-size: 40px; }
+            #score { font-size: 22px; padding: 6px 16px; }
+            #highScore { font-size: 15px; padding: 5px 14px; }
+            #gameOver { padding: 30px 25px; min-width: 200px; }
+            #gameOver h1 { font-size: 30px; }
+            #gameOver .finalScore { font-size: 40px; }
+            #gameOver button { font-size: 20px; padding: 12px 35px; }
+            #instructions { font-size: 12px; bottom: 90px; }
         }
     </style>
 </head>
 <body>
 
-<div id="touchArea"></div>
+<div id="gameWrapper">
+    <!-- Background Clouds -->
+    <div class="cloud" style="top:10%; left:-10%; animation-duration:25s;">☁️</div>
+    <div class="cloud" style="top:25%; left:-30%; animation-duration:30s; font-size:70px;">☁️</div>
+    <div class="cloud" style="top:5%; left:-50%; animation-duration:22s;">☁️</div>
 
-<div id="score">🍎 0</div>
+    <!-- Ground -->
+    <div id="ground">
+        <div id="groundLine"></div>
+    </div>
 
-<div id="player">
-    <svg viewBox="0 0 120 150">
-        <!-- Balloon (Bada) -->
-        <ellipse cx="60" cy="55" rx="52" ry="65" fill="#FF4444" stroke="#CC0000" stroke-width="2"/>
-        <ellipse cx="60" cy="55" rx="52" ry="65" fill="url(#balloonGrad)"/>
-        <!-- Balloon shine -->
-        <ellipse cx="42" cy="40" rx="18" ry="22" fill="rgba(255,255,255,0.3)"/>
-        
-        <!-- Rope -->
-        <line x1="60" y1="115" x2="60" y2="135" stroke="#8B4513" stroke-width="2.5"/>
-        
-        <!-- Basket / Person sitting -->
-        <rect x="30" y="115" width="60" height="28" rx="5" fill="#8B4513" stroke="#5D3A1A" stroke-width="1.5"/>
-        <rect x="32" y="117" width="56" height="24" rx="4" fill="#A0522D"/>
-        
-        <!-- Person (body) -->
-        <rect x="48" y="90" width="24" height="28" rx="8" fill="#FFD93D"/>
-        <!-- Head -->
-        <circle cx="60" cy="82" r="14" fill="#FFD93D" stroke="#E8A317" stroke-width="1"/>
-        <!-- Eyes -->
-        <circle cx="55" cy="80" r="2.5" fill="#333"/>
-        <circle cx="65" cy="80" r="2.5" fill="#333"/>
-        <circle cx="55" cy="79" r="1" fill="white"/>
-        <circle cx="65" cy="79" r="1" fill="white"/>
-        <!-- Smile -->
-        <path d="M54 86 Q60 92 66 86" stroke="#333" stroke-width="1.5" fill="none"/>
-        <!-- Hair -->
-        <path d="M46 78 Q50 70 60 72 Q70 70 74 78" fill="#5D3A1A"/>
-        
-        <!-- Flag in hand -->
-        <line x1="72" y1="90" x2="95" y2="65" stroke="#5D3A1A" stroke-width="2"/>
-        <!-- Flag cloth -->
-        <polygon points="95,65 115,70 95,80" fill="#FF6B6B" stroke="#CC0000" stroke-width="1"/>
-        <!-- "Shakir" on flag -->
-        <text x="97" y="76" font-size="8" fill="white" font-weight="bold" font-family="Arial">Shakir</text>
-        
-        <!-- Gradients -->
-        <defs>
-            <radialGradient id="balloonGrad" cx="40%" cy="35%">
-                <stop offset="0%" style="stop-color:#FF6B6B"/>
-                <stop offset="100%" style="stop-color:#DD2222"/>
-            </radialGradient>
-        </defs>
-    </svg>
+    <!-- Score -->
+    <div id="highScore">🏆 <span id="highScoreVal">0</span></div>
+    <div id="score">⭐ <span id="scoreVal">0</span></div>
+
+    <!-- Player -->
+    <div id="player">
+        <svg viewBox="0 0 80 110">
+            <!-- Balloon -->
+            <ellipse cx="40" cy="35" rx="36" ry="45" fill="#FF4444" stroke="#CC0000" stroke-width="1.5"/>
+            <ellipse cx="40" cy="35" rx="36" ry="45" fill="url(#balloonGrad)"/>
+            <ellipse cx="28" cy="26" rx="12" ry="16" fill="rgba(255,255,255,0.25)"/>
+            
+            <!-- Rope -->
+            <line x1="40" y1="75" x2="40" y2="90" stroke="#8B4513" stroke-width="2"/>
+            
+            <!-- Basket / Seat -->
+            <rect x="22" y="90" width="36" height="18" rx="4" fill="#8B4513" stroke="#5D3A1A" stroke-width="1"/>
+            
+            <!-- Person Body -->
+            <rect x="32" y="68" width="16" height="22" rx="6" fill="#FFD93D"/>
+            <!-- Head -->
+            <circle cx="40" cy="62" r="11" fill="#FFD93D" stroke="#E8A317" stroke-width="0.8"/>
+            <!-- Eyes -->
+            <circle cx="36" cy="60" r="2" fill="#333"/>
+            <circle cx="44" cy="60" r="2" fill="#333"/>
+            <circle cx="36" cy="59" r="0.8" fill="white"/>
+            <circle cx="44" cy="59" r="0.8" fill="white"/>
+            <!-- Smile -->
+            <path d="M35 65 Q40 70 45 65" stroke="#333" stroke-width="1.2" fill="none"/>
+            <!-- Hair -->
+            <path d="M31 58 Q35 52 40 53 Q45 52 49 58" fill="#5D3A1A"/>
+            
+            <!-- Flag in hand -->
+            <line x1="48" y1="68" x2="62" y2="52" stroke="#5D3A1A" stroke-width="1.8"/>
+            <polygon points="62,52 76,56 62,64" fill="#FF6B6B" stroke="#CC0000" stroke-width="0.8"/>
+            <text x="64" y="59" font-size="7" fill="white" font-weight="bold" font-family="Arial">Shakir</text>
+            
+            <defs>
+                <radialGradient id="balloonGrad" cx="35%" cy="30%">
+                    <stop offset="0%" style="stop-color:#FF6B6B"/>
+                    <stop offset="100%" style="stop-color:#DD2222"/>
+                </radialGradient>
+            </defs>
+        </svg>
+    </div>
+
+    <!-- Game Over -->
+    <div id="gameOver">
+        <h1>💥 Game Over</h1>
+        <div class="finalScore"><span id="finalScore">0</span></div>
+        <div class="highScore">🏆 Best: <span id="finalHighScore">0</span></div>
+        <button onclick="restartGame()">🔄 Play Again</button>
+    </div>
+
+    <div id="instructions">👆 Tap / Space to Jump</div>
 </div>
-
-<div id="gameOver">
-    💥 Game Over!<br>
-    <span id="finalScore">0</span><br>
-    <button onclick="restartGame()">🔄 Restart</button>
-</div>
-
-<div id="instructions">👆 Move your finger / mouse to control</div>
 
 <script>
+    // === DOM REFS ===
     const player = document.getElementById('player');
-    const scoreDisplay = document.getElementById('score');
-    const gameOverDiv = document.getElementById('gameOver');
+    const scoreVal = document.getElementById('scoreVal');
+    const highScoreVal = document.getElementById('highScoreVal');
     const finalScore = document.getElementById('finalScore');
-    const touchArea = document.getElementById('touchArea');
-    
+    const finalHighScore = document.getElementById('finalHighScore');
+    const gameOverDiv = document.getElementById('gameOver');
+    const gameWrapper = document.getElementById('gameWrapper');
+
+    // === GAME STATE ===
     let score = 0;
+    let highScore = parseInt(localStorage.getItem('shakirRunnerHigh')) || 0;
     let gameRunning = true;
-    let playerX = window.innerWidth / 2 - 60;
-    let fruits = [];
-    let animationFrame;
-    
-    // Position update function
-    function updatePlayer(x) {
-        if (!gameRunning) return;
-        const maxX = window.innerWidth - 120;
-        playerX = Math.max(0, Math.min(maxX, x - 60));
-        player.style.left = playerX + 'px';
-        player.style.transform = 'translateX(0)';
+    let isJumping = false;
+    let obstacleInterval;
+    let scoreInterval;
+    let gameSpeed = 2.2;
+    let frameId;
+
+    highScoreVal.textContent = highScore;
+
+    // === JUMP FUNCTION ===
+    function jump() {
+        if (!gameRunning || isJumping) return;
+        isJumping = true;
+        player.classList.add('jumping');
+        setTimeout(() => {
+            player.classList.remove('jumping');
+            isJumping = false;
+        }, 600);
     }
 
-    // === MOUSE CONTROL ===
-    document.addEventListener('mousemove', (e) => {
-        updatePlayer(e.clientX);
+    // === CONTROLS ===
+    document.addEventListener('keydown', (e) => {
+        if (e.code === 'Space' || e.key === ' ') {
+            e.preventDefault();
+            jump();
+        }
     });
 
-    // === TOUCH CONTROL (PERFECT) ===
-    touchArea.addEventListener('touchstart', (e) => {
+    gameWrapper.addEventListener('touchstart', (e) => {
         e.preventDefault();
-        const touch = e.touches[0];
-        updatePlayer(touch.clientX);
+        jump();
     }, { passive: false });
 
-    touchArea.addEventListener('touchmove', (e) => {
+    gameWrapper.addEventListener('mousedown', (e) => {
         e.preventDefault();
-        const touch = e.touches[0];
-        updatePlayer(touch.clientX);
-    }, { passive: false });
-
-    // Window resize pe player ko adjust karo
-    window.addEventListener('resize', () => {
-        const maxX = window.innerWidth - 120;
-        playerX = Math.max(0, Math.min(maxX, playerX));
-        player.style.left = playerX + 'px';
+        jump();
     });
 
-    // === FRUITS GENERATE ===
-    function createFruit() {
+    // === CREATE OBSTACLE ===
+    function createObstacle() {
         if (!gameRunning) return;
         
-        const fruitsList = ['🍎', '🍌', '🍇', '🍉', '🍓', '🍑', '🍒', '🥝'];
-        const fruit = document.createElement('div');
-        fruit.className = 'fruit';
-        fruit.textContent = fruitsList[Math.floor(Math.random() * fruitsList.length)];
-        fruit.style.left = Math.random() * (window.innerWidth - 60) + 'px';
-        fruit.style.fontSize = (35 + Math.random() * 30) + 'px';
-        fruit.style.animationDuration = (3 + Math.random() * 2.5) + 's';
+        const obstacles = ['🌵', '🪨', '📦', '🧱', '🪹'];
+        const obs = document.createElement('div');
+        obs.className = 'obstacle';
+        obs.textContent = obstacles[Math.floor(Math.random() * obstacles.length)];
+        obs.style.fontSize = (40 + Math.random() * 25) + 'px';
+        obs.style.animationDuration = (1.8 + Math.random() * 0.8) / (gameSpeed / 2.2) + 's';
         
-        document.body.appendChild(fruit);
-        fruits.push(fruit);
-        
-        // Collision check
+        gameWrapper.appendChild(obs);
+
         const checkCollision = setInterval(() => {
             if (!gameRunning) {
                 clearInterval(checkCollision);
                 return;
             }
             const pRect = player.getBoundingClientRect();
-            const fRect = fruit.getBoundingClientRect();
+            const oRect = obs.getBoundingClientRect();
             
-            if (pRect.x < fRect.x + fRect.width &&
-                pRect.x + pRect.width > fRect.x &&
-                pRect.y < fRect.y + fRect.height &&
-                pRect.y + pRect.height > fRect.y) {
-                gameOver();
+            // Collision detection with margin
+            const margin = 15;
+            if (pRect.x < oRect.x + oRect.width - margin &&
+                pRect.x + pRect.width - margin > oRect.x &&
+                pRect.y < oRect.y + oRect.height - margin &&
+                pRect.y + pRect.height - margin > oRect.y) {
+                endGame();
                 clearInterval(checkCollision);
             }
         }, 30);
-        
-        // Score increment
-        const checkScore = setInterval(() => {
-            if (!gameRunning) {
-                clearInterval(checkScore);
-                return;
-            }
-            const fRect = fruit.getBoundingClientRect();
-            if (fRect.y > window.innerHeight + 50) {
+
+        // Remove after animation
+        setTimeout(() => {
+            if (obs.parentNode) obs.remove();
+        }, 4000 / (gameSpeed / 2.2) + 500);
+    }
+
+    // === SCORE INCREASE ===
+    function startScoreTimer() {
+        scoreInterval = setInterval(() => {
+            if (gameRunning) {
                 score++;
-                scoreDisplay.textContent = '🍎 ' + score;
-                clearInterval(checkScore);
+                scoreVal.textContent = score;
+                // Speed gradually increases
+                if (score % 15 === 0) {
+                    gameSpeed += 0.15;
+                }
             }
         }, 100);
-        
-        // Cleanup
-        setTimeout(() => {
-            if (fruit.parentNode) {
-                fruit.remove();
-                const idx = fruits.indexOf(fruit);
-                if (idx > -1) fruits.splice(idx, 1);
-            }
-        }, 7000);
     }
 
-    function gameOver() {
+    // === OBSTACLE GENERATOR ===
+    function startObstacleGenerator() {
+        createObstacle();
+        obstacleInterval = setTimeout(() => {
+            if (gameRunning) startObstacleGenerator();
+        }, 1200 / (gameSpeed / 2.2) + Math.random() * 400);
+    }
+
+    // === END GAME ===
+    function endGame() {
         gameRunning = false;
-        finalScore.textContent = 'Score: ' + score;
         gameOverDiv.style.display = 'block';
-        fruits.forEach(f => { if (f.parentNode) f.remove(); });
-        fruits = [];
-        if (animationFrame) cancelAnimationFrame(animationFrame);
+        finalScore.textContent = score;
+        
+        if (score > highScore) {
+            highScore = score;
+            localStorage.setItem('shakirRunnerHigh', highScore);
+            highScoreVal.textContent = highScore;
+        }
+        finalHighScore.textContent = highScore;
+        
+        clearInterval(scoreInterval);
+        clearTimeout(obstacleInterval);
+        // Remove remaining obstacles
+        document.querySelectorAll('.obstacle').forEach(el => el.remove());
     }
 
+    // === RESTART ===
     function restartGame() {
-        score = 0;
         gameRunning = true;
-        scoreDisplay.textContent = '🍎 0';
+        score = 0;
+        gameSpeed = 2.2;
+        isJumping = false;
+        scoreVal.textContent = '0';
         gameOverDiv.style.display = 'none';
-        fruits.forEach(f => { if (f.parentNode) f.remove(); });
-        fruits = [];
-        player.style.left = (window.innerWidth / 2 - 60) + 'px';
-        playerX = window.innerWidth / 2 - 60;
-        generateFruits();
+        player.classList.remove('jumping');
+        
+        document.querySelectorAll('.obstacle').forEach(el => el.remove());
+        
+        startScoreTimer();
+        startObstacleGenerator();
     }
 
-    function generateFruits() {
-        if (!gameRunning) return;
-        createFruit();
-        const delay = 700 + Math.random() * 1300;
-        setTimeout(generateFruits, delay);
-    }
-
-    // Start game
-    player.style.left = (window.innerWidth / 2 - 60) + 'px';
-    playerX = window.innerWidth / 2 - 60;
-    generateFruits();
+    // === START GAME ===
+    startScoreTimer();
+    startObstacleGenerator();
 </script>
 
 </body>
-</html>
+    </html>
