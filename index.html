@@ -23,7 +23,8 @@
             overflow: hidden;
         }
 
-        #game {
+        /* ===== CONTAINER ===== */
+        #app {
             position: relative;
             width: 100%;
             max-width: 420px;
@@ -33,6 +34,235 @@
             overflow: hidden;
             border-radius: 0;
             box-shadow: 0 0 60px rgba(0, 0, 0, 0.9);
+        }
+
+        /* ===== AUTH SCREENS ===== */
+        .auth-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.92);
+            z-index: 50;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            transition: opacity 0.3s;
+        }
+
+        .auth-screen.hidden {
+            display: none;
+        }
+
+        .auth-screen h1 {
+            color: #FFD700;
+            font-size: 36px;
+            margin-bottom: 5px;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+        }
+
+        .auth-screen .sub {
+            color: #aaa;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .auth-screen input {
+            width: 100%;
+            max-width: 300px;
+            padding: 14px 18px;
+            margin: 6px 0;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-size: 16px;
+            outline: none;
+            transition: border 0.3s;
+        }
+
+        .auth-screen input:focus {
+            border-color: #FFD700;
+        }
+
+        .auth-screen input::placeholder {
+            color: #666;
+        }
+
+        .auth-screen button {
+            width: 100%;
+            max-width: 300px;
+            padding: 14px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .auth-screen button:active {
+            transform: scale(0.95);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #FFD700, #f0a500);
+            color: #1a1a2e;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #aaa;
+            border: 2px solid #444 !important;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ff4444, #cc0000);
+            color: white;
+        }
+
+        .auth-screen .switch {
+            color: #aaa;
+            font-size: 14px;
+            margin-top: 15px;
+        }
+
+        .auth-screen .switch span {
+            color: #FFD700;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .auth-screen .error {
+            color: #ff4444;
+            font-size: 14px;
+            margin: 5px 0;
+            min-height: 20px;
+        }
+
+        .auth-screen .success {
+            color: #00ff88;
+            font-size: 14px;
+            margin: 5px 0;
+            min-height: 20px;
+        }
+
+        /* ===== ADMIN PANEL ===== */
+        #adminPanel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 45;
+            padding: 20px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        #adminPanel.show {
+            display: block;
+        }
+
+        #adminPanel h2 {
+            color: #FFD700;
+            font-size: 28px;
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        #adminPanel .admin-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        #adminPanel .stat-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        #adminPanel .stat-box .num {
+            color: #FFD700;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        #adminPanel .stat-box .label {
+            color: #888;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        #adminPanel .user-list {
+            margin: 15px 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        #adminPanel .user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            margin: 4px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        #adminPanel .user-item .name {
+            color: white;
+            font-size: 14px;
+        }
+
+        #adminPanel .user-item .score {
+            color: #FFD700;
+            font-weight: bold;
+        }
+
+        #adminPanel .user-item .del {
+            color: #ff4444;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 0 8px;
+        }
+
+        #adminPanel .close-admin {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            color: #888;
+            font-size: 30px;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        #adminPanel .close-admin:hover {
+            color: white;
+        }
+
+        /* ===== GAME (hidden by default) ===== */
+        #game {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: none;
+        }
+
+        #game.show {
+            display: block;
         }
 
         /* ===== GROUND ===== */
@@ -181,6 +411,15 @@
             color: #FFD700;
         }
 
+        #userName {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 12px;
+            z-index: 20;
+        }
+
         /* ===== GAME OVER ===== */
         #gameOver {
             display: none;
@@ -219,21 +458,29 @@
         #gameOver button {
             font-size: 22px;
             padding: 12px 40px;
+            margin: 5px;
             border: none;
             border-radius: 50px;
-            background: linear-gradient(135deg, #ff6b35, #e63900);
-            color: white;
             font-weight: bold;
             cursor: pointer;
             transition: transform 0.2s;
-            box-shadow: 0 6px 30px rgba(255, 69, 0, 0.3);
         }
 
         #gameOver button:active {
             transform: scale(0.95);
         }
 
-        /* ===== INSTRUCTIONS ===== */
+        .btn-restart {
+            background: linear-gradient(135deg, #FFD700, #f0a500);
+            color: #1a1a2e;
+        }
+
+        .btn-logout {
+            background: linear-gradient(135deg, #ff4444, #cc0000);
+            color: white;
+        }
+
+        /* ===== TIP ===== */
         #tip {
             position: absolute;
             bottom: 105px;
@@ -294,239 +541,148 @@
                 font-size: 10px;
                 bottom: 85px;
             }
+            .auth-screen h1 {
+                font-size: 28px;
+            }
+            .auth-screen input,
+            .auth-screen button {
+                max-width: 280px;
+                padding: 12px 16px;
+                font-size: 15px;
+            }
+            #adminPanel h2 {
+                font-size: 24px;
+            }
+            #adminPanel .stat-box .num {
+                font-size: 20px;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div id="game">
+    <div id="app">
 
-        <!-- Ground -->
-        <div id="ground">
-            <div id="groundLine"></div>
+        <!-- ========== AUTH - LOGIN ========== -->
+        <div id="loginScreen" class="auth-screen">
+            <h1>🏃 Shakir Runner</h1>
+            <div class="sub">Login to play!</div>
+            <input type="text" id="loginUser" placeholder="👤 Username" autocomplete="username">
+            <input type="password" id="loginPass" placeholder="🔒 Password" autocomplete="current-password">
+            <div class="error" id="loginError"></div>
+            <button class="btn-primary" onclick="handleLogin()">🔑 Login</button>
+            <div class="switch">New user? <span onclick="showSignup()">Sign Up</span></div>
+            <div style="margin-top:10px;">
+                <button class="btn-secondary" onclick="guestLogin()" style="padding:10px 25px; font-size:14px; width:auto;">👻 Play as Guest</button>
+            </div>
+            <div style="margin-top:8px; font-size:11px; color:#444;">Admin: admin / admin123</div>
         </div>
 
-        <!-- Score -->
-        <div id="highScore">🏆 <span id="highVal">0</span></div>
-        <div id="score">⭐ <span id="scoreVal">0</span></div>
-
-        <!-- Player - Shakir -->
-        <div id="player">
-            <svg viewBox="0 0 65 90">
-                <!-- Cape -->
-                <path d="M32 35 L8 65 L20 68 L32 48 L44 68 L56 65 Z" fill="#cc0000" opacity="0.7"/>
-                <!-- Body -->
-                <rect x="20" y="35" width="24" height="28" rx="6" fill="#1a5276"/>
-                <rect x="18" y="37" width="28" height="6" rx="3" fill="#f1c40f"/>
-                <rect x="20" y="55" width="24" height="5" rx="2" fill="#f1c40f"/>
-                <!-- Head -->
-                <circle cx="32" cy="25" r="12" fill="#f5cba7"/>
-                <!-- Mask -->
-                <path d="M23 21 Q27 18 32 19 Q37 18 41 21 Q39 24 32 25 Q25 24 23 21 Z" fill="#2c3e50"/>
-                <!-- Eyes -->
-                <circle cx="28" cy="22" r="2.5" fill="white"/>
-                <circle cx="36" cy="22" r="2.5" fill="white"/>
-                <circle cx="28" cy="22" r="1.2" fill="#2c3e50"/>
-                <circle cx="36" cy="22" r="1.2" fill="#2c3e50"/>
-                <!-- Emblem -->
-                <text x="24" y="50" font-size="10" fill="#f1c40f" font-weight="bold" font-family="Arial">S</text>
-                <!-- Legs -->
-                <rect x="22" y="63" width="6" height="12" rx="2" fill="#1a5276"/>
-                <rect x="36" y="63" width="6" height="12" rx="2" fill="#1a5276"/>
-                <!-- Boots -->
-                <rect x="20" y="73" width="9" height="7" rx="2" fill="#c0392b"/>
-                <rect x="35" y="73" width="9" height="7" rx="2" fill="#c0392b"/>
-            </svg>
+        <!-- ========== AUTH - SIGNUP ========== -->
+        <div id="signupScreen" class="auth-screen hidden">
+            <h1>🏃 Shakir Runner</h1>
+            <div class="sub">Create your account!</div>
+            <input type="text" id="signupUser" placeholder="👤 Choose Username">
+            <input type="password" id="signupPass" placeholder="🔒 Choose Password">
+            <input type="password" id="signupConfirm" placeholder="🔒 Confirm Password">
+            <div class="error" id="signupError"></div>
+            <div class="success" id="signupSuccess"></div>
+            <button class="btn-primary" onclick="handleSignup()">📝 Sign Up</button>
+            <div class="switch">Already have account? <span onclick="showLogin()">Login</span></div>
         </div>
 
-        <!-- Game Over -->
-        <div id="gameOver">
-            <h1>💥 Game Over</h1>
-            <div class="final">⭐ <span id="finalScore">0</span></div>
-            <div class="best">🏆 Best: <span id="finalHigh">0</span></div>
-            <button onclick="restartGame()">🔄 Play Again</button>
+        <!-- ========== ADMIN PANEL ========== -->
+        <div id="adminPanel">
+            <button class="close-admin" onclick="closeAdmin()">✕</button>
+            <h2>👑 Admin Dashboard</h2>
+            <div class="admin-stats">
+                <div class="stat-box">
+                    <div class="num" id="adminTotalUsers">0</div>
+                    <div class="label">Total Users</div>
+                </div>
+                <div class="stat-box">
+                    <div class="num" id="adminTopScore">0</div>
+                    <div class="label">Top Score</div>
+                </div>
+            </div>
+            <h3 style="color:#aaa; font-size:16px; margin:10px 0;">📊 All Users</h3>
+            <div class="user-list" id="adminUserList"></div>
+            <button class="btn-danger" onclick="clearAllData()" style="width:100%; padding:12px; border:none; border-radius:10px; font-size:16px; cursor:pointer;">🗑️ Reset All Data</button>
         </div>
 
-        <div id="tip">👆 Tap / Click to Jump</div>
+        <!-- ========== GAME ========== -->
+        <div id="game">
+
+            <!-- Ground -->
+            <div id="ground">
+                <div id="groundLine"></div>
+            </div>
+
+            <!-- Score -->
+            <div id="highScore">🏆 <span id="highVal">0</span></div>
+            <div id="score">⭐ <span id="scoreVal">0</span></div>
+            <div id="userName"></div>
+
+            <!-- Player - Shakir -->
+            <div id="player">
+                <svg viewBox="0 0 65 90">
+                    <!-- Cape -->
+                    <path d="M32 35 L8 65 L20 68 L32 48 L44 68 L56 65 Z" fill="#cc0000" opacity="0.7"/>
+                    <!-- Body -->
+                    <rect x="20" y="35" width="24" height="28" rx="6" fill="#1a5276"/>
+                    <rect x="18" y="37" width="28" height="6" rx="3" fill="#f1c40f"/>
+                    <rect x="20" y="55" width="24" height="5" rx="2" fill="#f1c40f"/>
+                    <!-- Head -->
+                    <circle cx="32" cy="25" r="12" fill="#f5cba7"/>
+                    <!-- Mask -->
+                    <path d="M23 21 Q27 18 32 19 Q37 18 41 21 Q39 24 32 25 Q25 24 23 21 Z" fill="#2c3e50"/>
+                    <!-- Eyes -->
+                    <circle cx="28" cy="22" r="2.5" fill="white"/>
+                    <circle cx="36" cy="22" r="2.5" fill="white"/>
+                    <circle cx="28" cy="22" r="1.2" fill="#2c3e50"/>
+                    <circle cx="36" cy="22" r="1.2" fill="#2c3e50"/>
+                    <!-- Emblem -->
+                    <text x="24" y="50" font-size="10" fill="#f1c40f" font-weight="bold" font-family="Arial">S</text>
+                    <!-- Legs -->
+                    <rect x="22" y="63" width="6" height="12" rx="2" fill="#1a5276"/>
+                    <rect x="36" y="63" width="6" height="12" rx="2" fill="#1a5276"/>
+                    <!-- Boots -->
+                    <rect x="20" y="73" width="9" height="7" rx="2" fill="#c0392b"/>
+                    <rect x="35" y="73" width="9" height="7" rx="2" fill="#c0392b"/>
+                </svg>
+            </div>
+
+            <!-- Game Over -->
+            <div id="gameOver">
+                <h1>💥 Game Over</h1>
+                <div class="final">⭐ <span id="finalScore">0</span></div>
+                <div class="best">🏆 Best: <span id="finalHigh">0</span></div>
+                <button class="btn-restart" onclick="restartGame()">🔄 Play Again</button>
+                <br>
+                <button class="btn-logout" onclick="logout()">🚪 Logout</button>
+            </div>
+
+            <div id="tip">👆 Tap / Click to Jump</div>
+        </div>
+
     </div>
 
     <script>
-        // === DOM ===
-        const player = document.getElementById('player');
-        const scoreVal = document.getElementById('scoreVal');
-        const highVal = document.getElementById('highVal');
-        const finalScore = document.getElementById('finalScore');
-        const finalHigh = document.getElementById('finalHigh');
-        const gameOverDiv = document.getElementById('gameOver');
-        const game = document.getElementById('game');
+        // ==========================================
+        // ========== DATABASE (Local Storage) ==========
+        // ==========================================
 
-        // === STATE ===
-        let score = 0;
-        let high = parseInt(localStorage.getItem('shakirRunHigh')) || 0;
-        let running = true;
-        let jumping = false;
-        let speed = 2.2;
-        let obsInterval, coinInterval, scoreTimer;
-
-        highVal.textContent = high;
-
-        // === JUMP ===
-        function jump() {
-            if (!running || jumping) return;
-            jumping = true;
-            player.classList.add('jump');
-            setTimeout(() => {
-                player.classList.remove('jump');
-                jumping = false;
-            }, 600);
+        function getUsers() {
+            return JSON.parse(localStorage.getItem('shakirUsers')) || {};
         }
 
-        // === CONTROLS ===
-        game.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            jump();
-        }, { passive: false });
-
-        game.addEventListener('mousedown', (e) => {
-            e.preventDefault();
-            jump();
-        });
-
-        document.addEventListener('keydown', (e) => {
-            if (e.code === 'Space' || e.key === ' ') {
-                e.preventDefault();
-                jump();
-            }
-        });
-
-        // === CREATE OBSTACLE ===
-        function createObstacle() {
-            if (!running) return;
-            const list = ['🌵', '🪨', '🧱', '🪹', '🌲'];
-            const obs = document.createElement('div');
-            obs.className = 'obs';
-            obs.textContent = list[Math.floor(Math.random() * list.length)];
-            obs.style.fontSize = (35 + Math.random() * 25) + 'px';
-            obs.style.animationDuration = (1.8 + Math.random() * 0.6) / (speed / 2.2) + 's';
-            game.appendChild(obs);
-
-            const check = setInterval(() => {
-                if (!running) { clearInterval(check); return; }
-                const p = player.getBoundingClientRect();
-                const o = obs.getBoundingClientRect();
-                if (p.x < o.x + o.width - 18 &&
-                    p.x + p.width - 18 > o.x &&
-                    p.y < o.y + o.height - 18 &&
-                    p.y + p.height - 18 > o.y) {
-                    endGame();
-                    clearInterval(check);
-                }
-            }, 30);
-
-            setTimeout(() => {
-                if (obs.parentNode) obs.remove();
-            }, 5000 / (speed / 2.2) + 500);
+        function saveUsers(users) {
+            localStorage.setItem('shakirUsers', JSON.stringify(users));
         }
 
-        // === CREATE COIN ===
-        function createCoin() {
-            if (!running || Math.random() > 0.4) return;
-            const coin = document.createElement('div');
-            coin.className = 'coin';
-            coin.textContent = '🪙';
-            coin.style.fontSize = (25 + Math.random() * 15) + 'px';
-            coin.style.animationDuration = (2.0 + Math.random() * 0.6) / (speed / 2.2) + 's';
-            coin.style.bottom = (130 + Math.random() * 60) + 'px';
-            game.appendChild(coin);
-
-            const check = setInterval(() => {
-                if (!running) { clearInterval(check); return; }
-                const p = player.getBoundingClientRect();
-                const c = coin.getBoundingClientRect();
-                if (p.x < c.x + c.width - 10 &&
-                    p.x + p.width - 10 > c.x &&
-                    p.y < c.y + c.height - 10 &&
-                    p.y + p.height - 10 > c.y) {
-                    score += 5;
-                    scoreVal.textContent = score;
-                    if (coin.parentNode) coin.remove();
-                    clearInterval(check);
-                    // Sparkle
-                    const spark = document.createElement('div');
-                    spark.textContent = '✨';
-                    spark.style.cssText = 'position:absolute; left:' + c.left + 'px; top:' + c.top + 'px; font-size:24px; z-index:25; pointer-events:none;';
-                    document.body.appendChild(spark);
-                    setTimeout(() => spark.remove(), 300);
-                }
-            }, 30);
-
-            setTimeout(() => {
-                if (coin.parentNode) coin.remove();
-            }, 5000 / (speed / 2.2) + 500);
+        function getScores() {
+            return JSON.parse(localStorage.getItem('shakirScores')) || {};
         }
 
-        // === GAME LOOPS ===
-        function startScore() {
-            scoreTimer = setInterval(() => {
-                if (running) {
-                    score++;
-                    scoreVal.textContent = score;
-                    if (score % 15 === 0) {
-                        speed += 0.15;
-                    }
-                }
-            }, 80);
-        }
-
-        function startObs() {
-            if (!running) return;
-            createObstacle();
-            obsInterval = setTimeout(startObs, 900 / (speed / 2.2) + Math.random() * 400);
-        }
-
-        function startCoin() {
-            if (!running) return;
-            createCoin();
-            coinInterval = setTimeout(startCoin, 1200 / (speed / 2.2) + Math.random() * 500);
-        }
-
-        // === END GAME ===
-        function endGame() {
-            running = false;
-            gameOverDiv.style.display = 'block';
-            finalScore.textContent = score;
-            if (score > high) {
-                high = score;
-                localStorage.setItem('shakirRunHigh', high);
-                highVal.textContent = high;
-            }
-            finalHigh.textContent = high;
-            clearInterval(scoreTimer);
-            clearTimeout(obsInterval);
-            clearTimeout(coinInterval);
-            document.querySelectorAll('.obs, .coin').forEach(el => el.remove());
-        }
-
-        // === RESTART ===
-        function restartGame() {
-            running = true;
-            score = 0;
-            speed = 2.2;
-            jumping = false;
-            scoreVal.textContent = '0';
-            gameOverDiv.style.display = 'none';
-            player.classList.remove('jump');
-            document.querySelectorAll('.obs, .coin').forEach(el => el.remove());
-            startScore();
-            startObs();
-            startCoin();
-        }
-
-        // === START ===
-        startScore();
-        startObs();
-        startCoin();
-    </script>
-
-</body>
-    </html>
+        function saveScores(scores) {
+            localStorage.setIte
