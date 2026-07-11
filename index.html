@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+   <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -10,7 +10,6 @@
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             background: #0a0a1a;
             display: flex;
@@ -22,8 +21,6 @@
             user-select: none;
             overflow: hidden;
         }
-
-        /* ===== CONTAINER ===== */
         #app {
             position: relative;
             width: 100%;
@@ -35,8 +32,6 @@
             border-radius: 0;
             box-shadow: 0 0 60px rgba(0, 0, 0, 0.9);
         }
-
-        /* ===== AUTH SCREENS ===== */
         .auth-screen {
             position: absolute;
             top: 0;
@@ -51,26 +46,21 @@
             z-index: 50;
             padding: 30px;
             backdrop-filter: blur(10px);
-            transition: opacity 0.3s;
         }
-
         .auth-screen.hidden {
             display: none;
         }
-
         .auth-screen h1 {
             color: #FFD700;
             font-size: 36px;
             margin-bottom: 5px;
             text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
         }
-
         .auth-screen .sub {
             color: #aaa;
             font-size: 14px;
             margin-bottom: 30px;
         }
-
         .auth-screen input {
             width: 100%;
             max-width: 300px;
@@ -84,15 +74,12 @@
             outline: none;
             transition: border 0.3s;
         }
-
         .auth-screen input:focus {
             border-color: #FFD700;
         }
-
         .auth-screen input::placeholder {
             color: #666;
         }
-
         .auth-screen button {
             width: 100%;
             max-width: 300px;
@@ -105,54 +92,44 @@
             cursor: pointer;
             transition: transform 0.2s;
         }
-
         .auth-screen button:active {
             transform: scale(0.95);
         }
-
         .btn-primary {
             background: linear-gradient(135deg, #FFD700, #f0a500);
             color: #1a1a2e;
         }
-
         .btn-secondary {
             background: transparent;
             color: #aaa;
             border: 2px solid #444 !important;
         }
-
         .btn-danger {
             background: linear-gradient(135deg, #ff4444, #cc0000);
             color: white;
         }
-
         .auth-screen .switch {
             color: #aaa;
             font-size: 14px;
             margin-top: 15px;
         }
-
         .auth-screen .switch span {
             color: #FFD700;
             cursor: pointer;
             font-weight: bold;
         }
-
         .auth-screen .error {
             color: #ff4444;
             font-size: 14px;
             margin: 5px 0;
             min-height: 20px;
         }
-
         .auth-screen .success {
             color: #00ff88;
             font-size: 14px;
             margin: 5px 0;
             min-height: 20px;
         }
-
-        /* ===== ADMIN PANEL ===== */
         #adminPanel {
             position: absolute;
             top: 0;
@@ -165,25 +142,21 @@
             overflow-y: auto;
             display: none;
         }
-
         #adminPanel.show {
             display: block;
         }
-
         #adminPanel h2 {
             color: #FFD700;
             font-size: 28px;
             margin: 10px 0;
             text-align: center;
         }
-
         #adminPanel .admin-stats {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
             margin: 15px 0;
         }
-
         #adminPanel .stat-box {
             background: rgba(255, 255, 255, 0.05);
             padding: 12px;
@@ -191,25 +164,21 @@
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
-
         #adminPanel .stat-box .num {
             color: #FFD700;
             font-size: 24px;
             font-weight: bold;
         }
-
         #adminPanel .stat-box .label {
             color: #888;
             font-size: 12px;
             margin-top: 4px;
         }
-
         #adminPanel .user-list {
             margin: 15px 0;
             max-height: 300px;
             overflow-y: auto;
         }
-
         #adminPanel .user-item {
             display: flex;
             justify-content: space-between;
@@ -220,24 +189,20 @@
             margin: 4px 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
-
         #adminPanel .user-item .name {
             color: white;
             font-size: 14px;
         }
-
         #adminPanel .user-item .score {
             color: #FFD700;
             font-weight: bold;
         }
-
         #adminPanel .user-item .del {
             color: #ff4444;
             cursor: pointer;
             font-size: 18px;
             padding: 0 8px;
         }
-
         #adminPanel .close-admin {
             position: absolute;
             top: 15px;
@@ -248,24 +213,15 @@
             background: none;
             border: none;
         }
-
-        #adminPanel .close-admin:hover {
-            color: white;
-        }
-
-        /* ===== GAME (hidden by default) ===== */
         #game {
             position: relative;
             width: 100%;
             height: 100%;
             display: none;
         }
-
         #game.show {
             display: block;
         }
-
-        /* ===== GROUND ===== */
         #ground {
             position: absolute;
             bottom: 0;
@@ -275,7 +231,6 @@
             border-top: 4px solid #4a3520;
             z-index: 2;
         }
-
         #groundLine {
             position: absolute;
             top: 30px;
@@ -284,7 +239,6 @@
             background: repeating-linear-gradient(90deg, #6d5a3d 0px, #6d5a3d 40px, transparent 40px, transparent 80px);
             animation: scrollGround 1.2s linear infinite;
         }
-
         @keyframes scrollGround {
             from {
                 transform: translateX(0);
@@ -293,8 +247,6 @@
                 transform: translateX(-50%);
             }
         }
-
-        /* ===== PLAYER ===== */
         #player {
             position: absolute;
             bottom: 90px;
@@ -304,11 +256,9 @@
             z-index: 10;
             transition: none;
         }
-
         #player.jump {
             animation: jumpAnim 0.6s cubic-bezier(0.2, 0.8, 0.3, 1);
         }
-
         @keyframes jumpAnim {
             0% {
                 transform: translateY(0) scale(1);
@@ -323,15 +273,12 @@
                 transform: translateY(0) scale(1);
             }
         }
-
         #player svg {
             width: 100%;
             height: 100%;
             display: block;
             filter: drop-shadow(0 4px 20px rgba(255, 215, 0, 0.2));
         }
-
-        /* ===== OBSTACLES ===== */
         .obs {
             position: absolute;
             bottom: 90px;
@@ -339,7 +286,6 @@
             z-index: 5;
             animation: moveObs 2s linear forwards;
         }
-
         @keyframes moveObs {
             from {
                 right: -60px;
@@ -353,8 +299,6 @@
                 opacity: 0;
             }
         }
-
-        /* ===== COINS ===== */
         .coin {
             position: absolute;
             bottom: 150px;
@@ -362,7 +306,6 @@
             z-index: 6;
             animation: moveCoin 2.2s linear forwards;
         }
-
         @keyframes moveCoin {
             from {
                 right: -40px;
@@ -373,8 +316,6 @@
                 transform: rotate(720deg);
             }
         }
-
-        /* ===== SCORE ===== */
         #score {
             position: absolute;
             top: 15px;
@@ -389,11 +330,9 @@
             border: 2px solid rgba(255, 215, 0, 0.2);
             backdrop-filter: blur(5px);
         }
-
         #score span {
             color: white;
         }
-
         #highScore {
             position: absolute;
             top: 15px;
@@ -406,11 +345,9 @@
             z-index: 20;
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
-
         #highScore span {
             color: #FFD700;
         }
-
         #userName {
             position: absolute;
             bottom: 15px;
@@ -419,8 +356,6 @@
             font-size: 12px;
             z-index: 20;
         }
-
-        /* ===== GAME OVER ===== */
         #gameOver {
             display: none;
             position: absolute;
@@ -436,25 +371,21 @@
             border: 2px solid rgba(255, 50, 0, 0.2);
             backdrop-filter: blur(10px);
         }
-
         #gameOver h1 {
             font-size: 32px;
             color: #ff4444;
         }
-
         #gameOver .final {
             font-size: 44px;
             color: #FFD700;
             font-weight: bold;
             margin: 8px 0;
         }
-
         #gameOver .best {
             font-size: 16px;
             color: #aaa;
             margin-bottom: 15px;
         }
-
         #gameOver button {
             font-size: 22px;
             padding: 12px 40px;
@@ -465,22 +396,17 @@
             cursor: pointer;
             transition: transform 0.2s;
         }
-
         #gameOver button:active {
             transform: scale(0.95);
         }
-
         .btn-restart {
             background: linear-gradient(135deg, #FFD700, #f0a500);
             color: #1a1a2e;
         }
-
         .btn-logout {
             background: linear-gradient(135deg, #ff4444, #cc0000);
             color: white;
         }
-
-        /* ===== TIP ===== */
         #tip {
             position: absolute;
             bottom: 105px;
@@ -495,8 +421,6 @@
             white-space: nowrap;
             letter-spacing: 1px;
         }
-
-        /* ===== RESPONSIVE ===== */
         @media (max-width: 600px) {
             #player {
                 width: 50px;
@@ -563,22 +487,22 @@
 
     <div id="app">
 
-        <!-- ========== AUTH - LOGIN ========== -->
+        <!-- LOGIN -->
         <div id="loginScreen" class="auth-screen">
             <h1>🏃 Shakir Runner</h1>
             <div class="sub">Login to play!</div>
-            <input type="text" id="loginUser" placeholder="👤 Username" autocomplete="username">
-            <input type="password" id="loginPass" placeholder="🔒 Password" autocomplete="current-password">
+            <input type="text" id="loginUser" placeholder="👤 Username">
+            <input type="password" id="loginPass" placeholder="🔒 Password">
             <div class="error" id="loginError"></div>
             <button class="btn-primary" onclick="handleLogin()">🔑 Login</button>
             <div class="switch">New user? <span onclick="showSignup()">Sign Up</span></div>
             <div style="margin-top:10px;">
                 <button class="btn-secondary" onclick="guestLogin()" style="padding:10px 25px; font-size:14px; width:auto;">👻 Play as Guest</button>
             </div>
-            <div style="margin-top:8px; font-size:11px; color:#444;">Admin: admin / admin123</div>
+            <div style="margin-top:8px; font-size:11px; color:#555;">👑 Admin: admin / admin123</div>
         </div>
 
-        <!-- ========== AUTH - SIGNUP ========== -->
+        <!-- SIGNUP -->
         <div id="signupScreen" class="auth-screen hidden">
             <h1>🏃 Shakir Runner</h1>
             <div class="sub">Create your account!</div>
@@ -591,7 +515,7 @@
             <div class="switch">Already have account? <span onclick="showLogin()">Login</span></div>
         </div>
 
-        <!-- ========== ADMIN PANEL ========== -->
+        <!-- ADMIN PANEL -->
         <div id="adminPanel">
             <button class="close-admin" onclick="closeAdmin()">✕</button>
             <h2>👑 Admin Dashboard</h2>
@@ -610,49 +534,33 @@
             <button class="btn-danger" onclick="clearAllData()" style="width:100%; padding:12px; border:none; border-radius:10px; font-size:16px; cursor:pointer;">🗑️ Reset All Data</button>
         </div>
 
-        <!-- ========== GAME ========== -->
+        <!-- GAME -->
         <div id="game">
-
-            <!-- Ground -->
             <div id="ground">
                 <div id="groundLine"></div>
             </div>
-
-            <!-- Score -->
             <div id="highScore">🏆 <span id="highVal">0</span></div>
             <div id="score">⭐ <span id="scoreVal">0</span></div>
             <div id="userName"></div>
-
-            <!-- Player - Shakir -->
             <div id="player">
                 <svg viewBox="0 0 65 90">
-                    <!-- Cape -->
                     <path d="M32 35 L8 65 L20 68 L32 48 L44 68 L56 65 Z" fill="#cc0000" opacity="0.7"/>
-                    <!-- Body -->
                     <rect x="20" y="35" width="24" height="28" rx="6" fill="#1a5276"/>
                     <rect x="18" y="37" width="28" height="6" rx="3" fill="#f1c40f"/>
                     <rect x="20" y="55" width="24" height="5" rx="2" fill="#f1c40f"/>
-                    <!-- Head -->
                     <circle cx="32" cy="25" r="12" fill="#f5cba7"/>
-                    <!-- Mask -->
                     <path d="M23 21 Q27 18 32 19 Q37 18 41 21 Q39 24 32 25 Q25 24 23 21 Z" fill="#2c3e50"/>
-                    <!-- Eyes -->
                     <circle cx="28" cy="22" r="2.5" fill="white"/>
                     <circle cx="36" cy="22" r="2.5" fill="white"/>
                     <circle cx="28" cy="22" r="1.2" fill="#2c3e50"/>
                     <circle cx="36" cy="22" r="1.2" fill="#2c3e50"/>
-                    <!-- Emblem -->
                     <text x="24" y="50" font-size="10" fill="#f1c40f" font-weight="bold" font-family="Arial">S</text>
-                    <!-- Legs -->
                     <rect x="22" y="63" width="6" height="12" rx="2" fill="#1a5276"/>
                     <rect x="36" y="63" width="6" height="12" rx="2" fill="#1a5276"/>
-                    <!-- Boots -->
                     <rect x="20" y="73" width="9" height="7" rx="2" fill="#c0392b"/>
                     <rect x="35" y="73" width="9" height="7" rx="2" fill="#c0392b"/>
                 </svg>
             </div>
-
-            <!-- Game Over -->
             <div id="gameOver">
                 <h1>💥 Game Over</h1>
                 <div class="final">⭐ <span id="finalScore">0</span></div>
@@ -661,7 +569,6 @@
                 <br>
                 <button class="btn-logout" onclick="logout()">🚪 Logout</button>
             </div>
-
             <div id="tip">👆 Tap / Click to Jump</div>
         </div>
 
@@ -669,11 +576,14 @@
 
     <script>
         // ==========================================
-        // ========== DATABASE (Local Storage) ==========
+        // ========== DATABASE ==========
         // ==========================================
-
         function getUsers() {
-            return JSON.parse(localStorage.getItem('shakirUsers')) || {};
+            try {
+                return JSON.parse(localStorage.getItem('shakirUsers')) || {};
+            } catch (e) {
+                return {};
+            }
         }
 
         function saveUsers(users) {
@@ -681,8 +591,428 @@
         }
 
         function getScores() {
-            return JSON.parse(localStorage.getItem('shakirScores')) || {};
+            try {
+                return JSON.parse(localStorage.getItem('shakirScores')) || {};
+            } catch (e) {
+                return {};
+            }
         }
 
         function saveScores(scores) {
-            localStorage.setIte
+            localStorage.setItem('shakirScores', JSON.stringify(scores));
+        }
+
+        // ==========================================
+        // ========== INIT ==========
+        // ==========================================
+        function initDB() {
+            let users = getUsers();
+            if (!users['admin']) {
+                users['admin'] = { password: 'admin123', isAdmin: true };
+                saveUsers(users);
+            }
+            let scores = getScores();
+            if (!scores['admin']) {
+                scores['admin'] = 0;
+                saveScores(scores);
+            }
+        }
+        initDB();
+
+        // ==========================================
+        // ========== AUTH ==========
+        // ==========================================
+        let currentUser = null;
+
+        function showSignup() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('signupScreen').classList.remove('hidden');
+            document.getElementById('loginError').textContent = '';
+            document.getElementById('signupError').textContent = '';
+            document.getElementById('signupSuccess').textContent = '';
+        }
+
+        function showLogin() {
+            document.getElementById('signupScreen').classList.add('hidden');
+            document.getElementById('loginScreen').classList.remove('hidden');
+            document.getElementById('loginError').textContent = '';
+            document.getElementById('signupError').textContent = '';
+            document.getElementById('signupSuccess').textContent = '';
+        }
+
+        function handleLogin() {
+            var username = document.getElementById('loginUser').value.trim();
+            var password = document.getElementById('loginPass').value.trim();
+            var error = document.getElementById('loginError');
+
+            if (!username || !password) {
+                error.textContent = '❌ Please fill all fields';
+                return;
+            }
+
+            var users = getUsers();
+            if (!users[username]) {
+                error.textContent = '❌ User not found';
+                return;
+            }
+            if (users[username].password !== password) {
+                error.textContent = '❌ Wrong password';
+                return;
+            }
+
+            error.textContent = '';
+            currentUser = username;
+
+            if (users[username].isAdmin) {
+                openAdmin();
+            } else {
+                startGame();
+            }
+        }
+
+        function handleSignup() {
+            var username = document.getElementById('signupUser').value.trim();
+            var password = document.getElementById('signupPass').value.trim();
+            var confirm = document.getElementById('signupConfirm').value.trim();
+            var error = document.getElementById('signupError');
+            var success = document.getElementById('signupSuccess');
+
+            if (!username || !password || !confirm) {
+                error.textContent = '❌ Please fill all fields';
+                success.textContent = '';
+                return;
+            }
+            if (password.length < 4) {
+                error.textContent = '❌ Password must be at least 4 characters';
+                success.textContent = '';
+                return;
+            }
+            if (password !== confirm) {
+                error.textContent = '❌ Passwords do not match';
+                success.textContent = '';
+                return;
+            }
+
+            var users = getUsers();
+            if (users[username]) {
+                error.textContent = '❌ Username already exists';
+                success.textContent = '';
+                return;
+            }
+
+            users[username] = { password: password, isAdmin: false };
+            saveUsers(users);
+
+            var scores = getScores();
+            scores[username] = 0;
+            saveScores(scores);
+
+            error.textContent = '';
+            success.textContent = '✅ Account created! Please login.';
+            document.getElementById('signupUser').value = '';
+            document.getElementById('signupPass').value = '';
+            document.getElementById('signupConfirm').value = '';
+
+            setTimeout(function() {
+                showLogin();
+            }, 1500);
+        }
+
+        function guestLogin() {
+            currentUser = 'guest_' + Date.now();
+            startGame();
+        }
+
+        function logout() {
+            currentUser = null;
+            document.getElementById('game').classList.remove('show');
+            document.getElementById('game').style.display = 'none';
+            document.getElementById('gameOver').style.display = 'none';
+            document.getElementById('loginScreen').classList.remove('hidden');
+            document.getElementById('signupScreen').classList.add('hidden');
+            document.getElementById('adminPanel').classList.remove('show');
+            document.getElementById('adminPanel').style.display = 'none';
+            clearInterval(scoreTimer);
+            clearTimeout(obsInterval);
+            clearTimeout(coinInterval);
+            document.querySelectorAll('.obs, .coin').forEach(function(el) { el.remove(); });
+            running = false;
+        }
+
+        // ==========================================
+        // ========== ADMIN ==========
+        // ==========================================
+        function openAdmin() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('signupScreen').classList.add('hidden');
+            document.getElementById('game').classList.remove('show');
+            document.getElementById('game').style.display = 'none';
+            document.getElementById('adminPanel').style.display = 'block';
+            document.getElementById('adminPanel').classList.add('show');
+            updateAdminPanel();
+        }
+
+        function closeAdmin() {
+            document.getElementById('adminPanel').classList.remove('show');
+            document.getElementById('adminPanel').style.display = 'none';
+            document.getElementById('loginScreen').classList.remove('hidden');
+            currentUser = null;
+        }
+
+        function updateAdminPanel() {
+            var users = getUsers();
+            var scores = getScores();
+            var userList = document.getElementById('adminUserList');
+            var totalUsers = Object.keys(users).length;
+            var topScore = 0;
+            var html = '';
+
+            for (var u in users) {
+                var score = scores[u] || 0;
+                if (score > topScore) topScore = score;
+                if (u !== 'admin') {
+                    html += '<div class="user-item">' +
+                        '<span class="name">' + u + '</span>' +
+                        '<span class="score">⭐ ' + score + '</span>' +
+                        '<span class="del" onclick="deleteUser(\'' + u + '\')">✕</span>' +
+                        '</div>';
+                } else {
+                    html += '<div class="user-item">' +
+                        '<span class="name">👑 ' + u + ' (Admin)</span>' +
+                        '<span class="score">⭐ ' + score + '</span>' +
+                        '</div>';
+                }
+            }
+
+            document.getElementById('adminTotalUsers').textContent = totalUsers;
+            document.getElementById('adminTopScore').textContent = topScore;
+            userList.innerHTML = html;
+        }
+
+        function deleteUser(username) {
+            if (username === 'admin') {
+                alert('Cannot delete admin!');
+                return;
+            }
+            if (confirm('Delete user "' + username + '"?')) {
+                var users = getUsers();
+                delete users[username];
+                saveUsers(users);
+                var scores = getScores();
+                delete scores[username];
+                saveScores(scores);
+                updateAdminPanel();
+            }
+        }
+
+        function clearAllData() {
+            if (confirm('⚠️ Delete ALL data? This cannot be undone!')) {
+                localStorage.removeItem('shakirUsers');
+                localStorage.removeItem('shakirScores');
+                initDB();
+                updateAdminPanel();
+                alert('✅ All data reset!');
+            }
+        }
+
+        // ==========================================
+        // ========== GAME ==========
+        // ==========================================
+        var player = document.getElementById('player');
+        var scoreVal = document.getElementById('scoreVal');
+        var highVal = document.getElementById('highVal');
+        var finalScore = document.getElementById('finalScore');
+        var finalHigh = document.getElementById('finalHigh');
+        var gameOverDiv = document.getElementById('gameOver');
+        var game = document.getElementById('game');
+        var userName = document.getElementById('userName');
+
+        var score = 0;
+        var high = 0;
+        var running = false;
+        var jumping = false;
+        var speed = 2.2;
+        var obsInterval, coinInterval, scoreTimer;
+
+        function startGame() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('signupScreen').classList.add('hidden');
+            document.getElementById('adminPanel').classList.remove('show');
+            document.getElementById('adminPanel').style.display = 'none';
+            game.style.display = 'block';
+            game.classList.add('show');
+            gameOverDiv.style.display = 'none';
+
+            var scores = getScores();
+            high = scores[currentUser] || 0;
+            highVal.textContent = high;
+            userName.textContent = '👤 ' + currentUser;
+
+            score = 0;
+            speed = 2.2;
+            running = true;
+            jumping = false;
+            scoreVal.textContent = '0';
+
+            document.querySelectorAll('.obs, .coin').forEach(function(el) { el.remove(); });
+            player.classList.remove('jump');
+
+            startScore();
+            startObs();
+            startCoin();
+        }
+
+        function jump() {
+            if (!running || jumping) return;
+            jumping = true;
+            player.classList.add('jump');
+            setTimeout(function() {
+                player.classList.remove('jump');
+                jumping = false;
+            }, 600);
+        }
+
+        // Touch Events
+        document.getElementById('game').addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            jump();
+        }, { passive: false });
+
+        document.getElementById('game').addEventListener('mousedown', function(e) {
+            e.preventDefault();
+            jump();
+        });
+
+        // Keyboard
+        document.addEventListener('keydown', function(e) {
+            if (e.code === 'Space' || e.key === ' ') {
+                e.preventDefault();
+                jump();
+            }
+        });
+
+        function createObstacle() {
+            if (!running) return;
+            var list = ['🌵', '🪨', '🧱', '🪹', '🌲'];
+            var obs = document.createElement('div');
+            obs.className = 'obs';
+            obs.textContent = list[Math.floor(Math.random() * list.length)];
+            obs.style.fontSize = (35 + Math.random() * 25) + 'px';
+            obs.style.animationDuration = (1.8 + Math.random() * 0.6) / (speed / 2.2) + 's';
+            document.getElementById('game').appendChild(obs);
+
+            var check = setInterval(function() {
+                if (!running) { clearInterval(check); return; }
+                var p = player.getBoundingClientRect();
+                var o = obs.getBoundingClientRect();
+                if (p.x < o.x + o.width - 18 &&
+                    p.x + p.width - 18 > o.x &&
+                    p.y < o.y + o.height - 18 &&
+                    p.y + p.height - 18 > o.y) {
+                    endGame();
+                    clearInterval(check);
+                }
+            }, 30);
+
+            setTimeout(function() {
+                if (obs.parentNode) obs.remove();
+            }, 5000 / (speed / 2.2) + 500);
+        }
+
+        function createCoin() {
+            if (!running || Math.random() > 0.4) return;
+            var coin = document.createElement('div');
+            coin.className = 'coin';
+            coin.textContent = '🪙';
+            coin.style.fontSize = (25 + Math.random() * 15) + 'px';
+            coin.style.animationDuration = (2.0 + Math.random() * 0.6) / (speed / 2.2) + 's';
+            coin.style.bottom = (130 + Math.random() * 60) + 'px';
+            document.getElementById('game').appendChild(coin);
+
+            var check = setInterval(function() {
+                if (!running) { clearInterval(check); return; }
+                var p = player.getBoundingClientRect();
+                var c = coin.getBoundingClientRect();
+                if (p.x < c.x + c.width - 10 &&
+                    p.x + p.width - 10 > c.x &&
+                    p.y < c.y + c.height - 10 &&
+                    p.y + p.height - 10 > c.y) {
+                    score += 5;
+                    scoreVal.textContent = score;
+                    if (coin.parentNode) coin.remove();
+                    clearInterval(check);
+                    var spark = document.createElement('div');
+                    spark.textContent = '✨';
+                    spark.style.cssText = 'position:absolute; left:' + c.left + 'px; top:' + c.top + 'px; font-size:24px; z-index:25; pointer-events:none;';
+                    document.body.appendChild(spark);
+                    setTimeout(function() { spark.remove(); }, 300);
+                }
+            }, 30);
+
+            setTimeout(function() {
+                if (coin.parentNode) coin.remove();
+            }, 5000 / (speed / 2.2) + 500);
+        }
+
+        function startScore() {
+            scoreTimer = setInterval(function() {
+                if (running) {
+                    score++;
+                    scoreVal.textContent = score;
+                    if (score % 15 === 0) {
+                        speed += 0.15;
+                    }
+                }
+            }, 80);
+        }
+
+        function startObs() {
+            if (!running) return;
+            createObstacle();
+            obsInterval = setTimeout(startObs, 900 / (speed / 2.2) + Math.random() * 400);
+        }
+
+        function startCoin() {
+            if (!running) return;
+            createCoin();
+            coinInterval = setTimeout(startCoin, 1200 / (speed / 2.2) + Math.random() * 500);
+        }
+
+        function endGame() {
+            running = false;
+            gameOverDiv.style.display = 'block';
+            finalScore.textContent = score;
+
+            var scores = getScores();
+            if (scores[currentUser] === undefined) scores[currentUser] = 0;
+            if (score > scores[currentUser]) {
+                scores[currentUser] = score;
+                saveScores(scores);
+                high = score;
+            }
+            highVal.textContent = high;
+            finalHigh.textContent = high;
+
+            clearInterval(scoreTimer);
+            clearTimeout(obsInterval);
+            clearTimeout(coinInterval);
+            document.querySelectorAll('.obs, .coin').forEach(function(el) { el.remove(); });
+        }
+
+        function restartGame() {
+            running = true;
+            score = 0;
+            speed = 2.2;
+            jumping = false;
+            scoreVal.textContent = '0';
+            gameOverDiv.style.display = 'none';
+            player.classList.remove('jump');
+            document.querySelectorAll('.obs, .coin').forEach(function(el) { el.remove(); });
+            startScore();
+            startObs();
+            startCoin();
+        }
+    </script>
+
+</body>
+</html>
