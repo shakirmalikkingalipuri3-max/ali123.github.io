@@ -1,4 +1,991 @@
-   <!<!<!DOCTYPE html>
+   <!<!<!<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Shakir Sky Adventure ✈️</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(145deg, #0b1a2e, #1a2f3f);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            touch-action: none;
+        }
+
+        #app {
+            width: 100%;
+            max-width: 420px;
+            height: 100vh;
+            max-height: 750px;
+            background: linear-gradient(180deg, #0b2b44, #1a4a6a);
+            border-radius: 28px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            touch-action: none;
+        }
+
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            touch-action: none;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        /* ---------- LOGIN SCREEN ---------- */
+        #authScreen {
+            background: linear-gradient(160deg, #0d2132, #1a3a5f);
+            gap: 18px;
+        }
+
+        #authScreen h1 {
+            font-size: 42px;
+            color: #4fc3f7;
+            text-shadow: 0 4px 0 #0d47a1, 0 0 40px #4fc3f777;
+            letter-spacing: 3px;
+            margin-bottom: 6px;
+        }
+
+        #authScreen .subtitle {
+            color: #ffd54f;
+            font-size: 18px;
+            letter-spacing: 4px;
+            font-weight: 600;
+        }
+
+        .auth-box {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(6px);
+            padding: 24px 22px;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 320px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .auth-box input {
+            padding: 14px 16px;
+            border-radius: 16px;
+            border: none;
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            font-size: 16px;
+            outline: 2px solid transparent;
+            transition: 0.25s;
+        }
+
+        .auth-box input::placeholder {
+            color: #8ab3cc;
+        }
+
+        .auth-box input:focus {
+            outline-color: #4fc3f7;
+            background: rgba(255, 255, 255, 0.14);
+        }
+
+        .btn {
+            padding: 14px;
+            border: none;
+            border-radius: 16px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            touch-action: manipulation;
+            color: #0b1a2e;
+        }
+
+        .btn-primary {
+            background: #4fc3f7;
+            box-shadow: 0 6px 0 #0d47a1;
+            color: #fff;
+        }
+        .btn-primary:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #0d47a1;
+        }
+
+        .btn-secondary {
+            background: #ffd54f;
+            box-shadow: 0 6px 0 #f57f17;
+        }
+        .btn-secondary:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #f57f17;
+        }
+
+        .btn-guest {
+            background: #66bb6a;
+            box-shadow: 0 6px 0 #2e7d32;
+            color: #fff;
+        }
+        .btn-guest:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #2e7d32;
+        }
+
+        .btn-danger {
+            background: #ef5350;
+            box-shadow: 0 6px 0 #b71c1c;
+            color: #fff;
+        }
+        .btn-danger:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #b71c1c;
+        }
+
+        .auth-toggle {
+            color: #b5d6e8;
+            font-size: 14px;
+            text-align: center;
+            margin-top: 4px;
+        }
+
+        .auth-toggle span {
+            color: #4fc3f7;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        #authMsg {
+            color: #ffb3b3;
+            font-size: 14px;
+            text-align: center;
+            min-height: 22px;
+        }
+
+        /* ---------- GAME SCREEN ---------- */
+        #gameScreen {
+            background: #0b2b44;
+            padding: 0;
+            justify-content: flex-start;
+            overflow: hidden;
+        }
+
+        #gameCanvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, #0b2b44 0%, #1a4a6a 40%, #2d6b8a 70%, #4a8db7 100%);
+            touch-action: none;
+            cursor: pointer;
+        }
+
+        /* ---------- GAME OVER SCREEN ---------- */
+        #gameOverScreen {
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            gap: 14px;
+            z-index: 20;
+        }
+
+        #gameOverScreen h2 {
+            color: #ff6b6b;
+            font-size: 48px;
+            text-shadow: 0 0 40px #ff6b6b88;
+        }
+
+        #gameOverScreen .final-score {
+            color: #fff;
+            font-size: 28px;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 12px 40px;
+            border-radius: 20px;
+        }
+
+        #gameOverScreen .high-score {
+            color: #ffd54f;
+            font-size: 20px;
+        }
+
+        .btn-restart {
+            background: #4fc3f7;
+            box-shadow: 0 6px 0 #0d47a1;
+            color: #fff;
+            padding: 16px 50px;
+            font-size: 22px;
+            margin-top: 8px;
+        }
+        .btn-restart:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #0d47a1;
+        }
+
+        .btn-logout {
+            background: #ef5350;
+            box-shadow: 0 6px 0 #b71c1c;
+            color: #fff;
+            padding: 12px 40px;
+            font-size: 16px;
+        }
+        .btn-logout:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #b71c1c;
+        }
+
+        /* ---------- ADMIN SCREEN ---------- */
+        #adminScreen {
+            background: #0d1f2b;
+            gap: 10px;
+            overflow-y: auto;
+            padding: 20px 16px;
+            align-items: stretch;
+        }
+
+        #adminScreen h2 {
+            color: #4fc3f7;
+            font-size: 28px;
+            text-align: center;
+        }
+
+        #adminScreen .admin-stats {
+            color: #9bbfd4;
+            text-align: center;
+            font-size: 15px;
+        }
+
+        .admin-user-list {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .admin-user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            color: #d4e8f0;
+            font-size: 15px;
+        }
+
+        .admin-user-item .del-btn {
+            background: #ef5350;
+            border: none;
+            color: #fff;
+            padding: 4px 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .admin-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 6px;
+        }
+
+        .admin-actions .btn {
+            flex: 1;
+            min-width: 100px;
+            font-size: 14px;
+            padding: 12px;
+        }
+
+        .btn-back {
+            background: #66bb6a;
+            box-shadow: 0 6px 0 #2e7d32;
+            color: #fff;
+        }
+        .btn-back:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #2e7d32;
+        }
+
+        .admin-user-list::-webkit-scrollbar {
+            width: 4px;
+        }
+        .admin-user-list::-webkit-scrollbar-thumb {
+            background: #4fc3f7;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 440px) {
+            #app {
+                max-height: 100vh;
+                border-radius: 0;
+            }
+            #authScreen h1 {
+                font-size: 32px;
+            }
+            .auth-box {
+                padding: 18px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app">
+
+        <!-- AUTH SCREEN -->
+        <div id="authScreen" class="screen active">
+            <h1>✈️ SHAKIR</h1>
+            <div class="subtitle">SKY ADVENTURE</div>
+
+            <div class="auth-box" id="authBox">
+                <input type="text" id="authUser" placeholder="Username" />
+                <input type="password" id="authPass" placeholder="Password" />
+
+                <div style="display:flex; flex-direction:column; gap:10px;">
+                    <button class="btn btn-primary" id="loginBtn">🔑 Login</button>
+                    <button class="btn btn-secondary" id="signupBtn">📝 Sign Up</button>
+                    <button class="btn btn-guest" id="guestBtn">👤 Guest</button>
+                    <button class="btn btn-danger" id="adminBtn">👑 Admin</button>
+                </div>
+
+                <div class="auth-toggle">
+                    Don't have account? <span id="toggleAuth">Sign Up</span>
+                </div>
+                <div id="authMsg"></div>
+            </div>
+        </div>
+
+        <!-- GAME SCREEN -->
+        <div id="gameScreen" class="screen">
+            <canvas id="gameCanvas"></canvas>
+        </div>
+
+        <!-- GAME OVER SCREEN -->
+        <div id="gameOverScreen" class="screen">
+            <h2>💥 CRASHED!</h2>
+            <div class="final-score">🏆 <span id="finalScore">0</span></div>
+            <div class="high-score">⭐ Best: <span id="highScoreDisplay">0</span></div>
+            <button class="btn btn-restart" id="restartBtn">🔄 Play Again</button>
+            <button class="btn btn-logout" id="logoutBtn">🚪 Logout</button>
+        </div>
+
+        <!-- ADMIN SCREEN -->
+        <div id="adminScreen" class="screen">
+            <h2>👑 ADMIN</h2>
+            <div class="admin-stats" id="adminStats">Users: 0 | Top: 0</div>
+            <div class="admin-user-list" id="adminUserList"></div>
+            <div class="admin-actions">
+                <button class="btn btn-danger" id="adminResetBtn">🗑️ Reset</button>
+                <button class="btn btn-back" id="adminBackBtn">🔙 Back</button>
+            </div>
+            <div id="adminMsg" style="color:#9bbfd4; text-align:center; margin-top:4px;"></div>
+        </div>
+
+    </div>
+
+    <script>
+        // ============================================================
+        //  SHAKIR SKY ADVENTURE - FIXED LOGIN/SIGNUP
+        // ============================================================
+
+        const $ = id => document.getElementById(id);
+
+        // Screens
+        const authScreen = $('authScreen');
+        const gameScreen = $('gameScreen');
+        const gameOverScreen = $('gameOverScreen');
+        const adminScreen = $('adminScreen');
+
+        const authUser = $('authUser');
+        const authPass = $('authPass');
+        const authMsg = $('authMsg');
+        const toggleAuth = $('toggleAuth');
+
+        const finalScoreEl = $('finalScore');
+        const highScoreDisplay = $('highScoreDisplay');
+        const adminUserList = $('adminUserList');
+        const adminStats = $('adminStats');
+        const adminMsg = $('adminMsg');
+
+        const canvas = $('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // ---------- STATE ----------
+        let isLoginMode = true;
+        let currentUser = null;
+        let gameRunning = false;
+        let gameLoopId = null;
+        let W, H;
+
+        // Game vars
+        let player, birds, clouds, score, highScore, speed, frameCount, gameOver;
+
+        const GRAVITY = 0.4;
+        const FLAP_FORCE = -7;
+        const GROUND_Y_RATIO = 0.88;
+
+        // ---------- HELPERS ----------
+        function getUsers() {
+            try { return JSON.parse(localStorage.getItem('shakirUsers')) || {}; } catch { return {}; }
+        }
+
+        function getScores() {
+            try { return JSON.parse(localStorage.getItem('shakirScores')) || {}; } catch { return {}; }
+        }
+
+        function saveUsers(users) {
+            localStorage.setItem('shakirUsers', JSON.stringify(users));
+        }
+
+        function saveScores(scores) {
+            localStorage.setItem('shakirScores', JSON.stringify(scores));
+        }
+
+        function setHighScore(user, val) {
+            const scores = getScores();
+            if (!scores[user] || val > scores[user]) scores[user] = val;
+            saveScores(scores);
+        }
+
+        function getHighScore(user) {
+            const scores = getScores();
+            return scores[user] || 0;
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            const el = document.getElementById(screenId);
+            if (el) el.classList.add('active');
+        }
+
+        // ---------- AUTH ----------
+        function login() {
+            const u = authUser.value.trim();
+            const p = authPass.value.trim();
+            if (!u || !p) { authMsg.textContent = '❌ Fill all fields'; return; }
+            const users = getUsers();
+            if (!users[u]) { authMsg.textContent = '❌ User not found'; return; }
+            if (users[u] !== p) { authMsg.textContent = '❌ Wrong password'; return; }
+            authMsg.textContent = '';
+            currentUser = u;
+            highScore = getHighScore(u);
+            startGame();
+        }
+
+        function signup() {
+            const u = authUser.value.trim();
+            const p = authPass.value.trim();
+            if (!u || !p) { authMsg.textContent = '❌ Fill all fields'; return; }
+            if (u.length < 3) { authMsg.textContent = '❌ Username min 3 chars'; return; }
+            if (p.length < 4) { authMsg.textContent = '❌ Password min 4 chars'; return; }
+            const users = getUsers();
+            if (users[u]) { authMsg.textContent = '❌ Username exists'; return; }
+            users[u] = p;
+            saveUsers(users);
+            authMsg.textContent = '✅ Account created! Login now.';
+            authUser.value = u;
+            authPass.value = '';
+            isLoginMode = true;
+            toggleAuth.textContent = 'Sign Up';
+            // Auto login after signup
+            currentUser = u;
+            highScore = getHighScore(u);
+            startGame();
+        }
+
+        function guestLogin() {
+            currentUser = null;
+            highScore = 0;
+            startGame();
+        }
+
+        function adminLogin() {
+            const u = authUser.value.trim();
+            const p = authPass.value.trim();
+            if (u === 'admin' && p === 'admin123') {
+                authMsg.textContent = '';
+                showAdminPanel();
+            } else {
+                authMsg.textContent = '❌ Invalid admin credentials';
+            }
+        }
+
+        function logout() {
+            stopGame();
+            gameOver = false;
+            currentUser = null;
+            highScore = 0;
+            showScreen('authScreen');
+        }
+
+        // ---------- ADMIN ----------
+        function showAdminPanel() {
+            showScreen('adminScreen');
+            renderAdminList();
+        }
+
+        function renderAdminList() {
+            const users = getUsers();
+            const scores = getScores();
+            const names = Object.keys(users);
+            let html = '';
+            let topScore = 0;
+            names.forEach(u => {
+                const s = scores[u] || 0;
+                if (s > topScore) topScore = s;
+                html += `<div class="admin-user-item">
+                            <span>${u}</span>
+                            <span>⭐ ${s}</span>
+                            <button class="del-btn" data-user="${u}">Delete</button>
+                        </div>`;
+            });
+            adminUserList.innerHTML = html || '<div style="color:#8ab3cc;padding:20px;">No users</div>';
+            adminStats.textContent = `Users: ${names.length} | Top: ${topScore}`;
+
+            document.querySelectorAll('.del-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const user = this.dataset.user;
+                    if (confirm(`Delete "${user}"?`)) {
+                        const u2 = getUsers();
+                        const s2 = getScores();
+                        delete u2[user];
+                        delete s2[user];
+                        saveUsers(u2);
+                        saveScores(s2);
+                        renderAdminList();
+                        adminMsg.textContent = `✅ "${user}" deleted`;
+                    }
+                });
+            });
+        }
+
+        function resetAllData() {
+            if (confirm('⚠️ Delete ALL data?')) {
+                localStorage.removeItem('shakirUsers');
+                localStorage.removeItem('shakirScores');
+                renderAdminList();
+                adminMsg.textContent = '✅ All data reset';
+            }
+        }
+
+        // ---------- GAME ----------
+        function initGameVars() {
+            player = { x: 60, y: 0, w: 48, h: 32, vy: 0 };
+            birds = [];
+            clouds = [];
+            score = 0;
+            speed = 3.5;
+            frameCount = 0;
+            gameOver = false;
+        }
+
+        function resizeCanvas() {
+            const rect = canvas.parentElement.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+            W = canvas.width;
+            H = canvas.height;
+            if (player && !gameRunning && !gameOver) {
+                player.y = H * 0.4;
+            }
+        }
+
+        function startGame() {
+            initGameVars();
+            if (currentUser) {
+                highScore = getHighScore(currentUser);
+            } else {
+                highScore = 0;
+            }
+            showScreen('gameScreen');
+            resizeCanvas();
+            gameRunning = true;
+            if (gameLoopId) cancelAnimationFrame(gameLoopId);
+            gameLoop();
+        }
+
+        function stopGame() {
+            gameRunning = false;
+            if (gameLoopId) {
+                cancelAnimationFrame(gameLoopId);
+                gameLoopId = null;
+            }
+        }
+
+        function gameLoop() {
+            if (!gameRunning) return;
+            update();
+            draw();
+            gameLoopId = requestAnimationFrame(gameLoop);
+        }
+
+        function update() {
+            if (gameOver) return;
+            frameCount++;
+            const groundY = H * GROUND_Y_RATIO;
+
+            if (score > 0 && score % 20 === 0 && speed < 8) {
+                speed += 0.3;
+            }
+
+            // Player physics
+            player.vy += GRAVITY;
+            player.y += player.vy;
+
+            if (player.y < 0) {
+                player.y = 0;
+                player.vy = 0;
+            }
+            if (player.y + player.h > groundY) {
+                endGame();
+                return;
+            }
+
+            // Spawn clouds
+            if (frameCount % 120 === 0) {
+                clouds.push({
+                    x: W,
+                    y: Math.random() * (groundY * 0.5),
+                    w: 60 + Math.random() * 80,
+                    h: 25 + Math.random() * 20,
+                    speed: 1 + Math.random() * 0.8
+                });
+            }
+
+            // Spawn birds
+            if (frameCount % 70 === 0 && Math.random() < 0.5) {
+                const size = 24 + Math.random() * 20;
+                birds.push({
+                    x: W,
+                    y: 30 + Math.random() * (groundY - 80),
+                    w: size,
+                    h: size * 0.7,
+                    wingAngle: 0,
+                    type: Math.floor(Math.random() * 3),
+                    speed: speed * (0.8 + Math.random() * 0.4)
+                });
+            }
+
+            // Move clouds
+            for (let i = clouds.length - 1; i >= 0; i--) {
+                const c = clouds[i];
+                c.x -= c.speed;
+                if (c.x + c.w < -20) clouds.splice(i, 1);
+            }
+
+            // Move birds & collision
+            for (let i = birds.length - 1; i >= 0; i--) {
+                const b = birds[i];
+                b.x -= b.speed;
+                b.wingAngle += 0.15;
+
+                if (b.x + b.w < -20) {
+                    birds.splice(i, 1);
+                    continue;
+                }
+
+                if (!gameOver && rectCollide(player, b)) {
+                    endGame();
+                    return;
+                }
+            }
+
+            if (frameCount % 3 === 0) {
+                score += 1;
+            }
+        }
+
+        function rectCollide(a, b) {
+            const shrink = 6;
+            return a.x + shrink < b.x + b.w - shrink &&
+                a.x + a.w - shrink > b.x + shrink &&
+                a.y + shrink < b.y + b.h - shrink &&
+                a.y + a.h - shrink > b.y + shrink;
+        }
+
+        function endGame() {
+            gameOver = true;
+            gameRunning = false;
+            if (gameLoopId) {
+                cancelAnimationFrame(gameLoopId);
+                gameLoopId = null;
+            }
+
+            if (currentUser) {
+                const old = getHighScore(currentUser);
+                if (score > old) {
+                    setHighScore(currentUser, score);
+                    highScore = score;
+                } else {
+                    highScore = old;
+                }
+            } else {
+                highScore = Math.max(highScore, score);
+            }
+
+            finalScoreEl.textContent = score;
+            highScoreDisplay.textContent = highScore;
+            showScreen('gameOverScreen');
+        }
+
+        // ---------- DRAW ----------
+        function draw() {
+            ctx.clearRect(0, 0, W, H);
+            const groundY = H * GROUND_Y_RATIO;
+
+            // Sky
+            const sky = ctx.createLinearGradient(0, 0, 0, groundY);
+            sky.addColorStop(0, '#0b2b44');
+            sky.addColorStop(0.3, '#1a4a6a');
+            sky.addColorStop(0.6, '#2d6b8a');
+            sky.addColorStop(0.85, '#4a8db7');
+            sky.addColorStop(1, '#6ab0d6');
+            ctx.fillStyle = sky;
+            ctx.fillRect(0, 0, W, groundY);
+
+            // Sun
+            ctx.shadowColor = '#ffd54f88';
+            ctx.shadowBlur = 60;
+            ctx.fillStyle = '#ffd54f';
+            ctx.beginPath();
+            ctx.arc(W - 60, 50, 35, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+
+            // Clouds
+            clouds.forEach(c => {
+                ctx.fillStyle = 'rgba(255,255,255,0.15)';
+                ctx.shadowBlur = 20;
+                ctx.shadowColor = 'rgba(255,255,255,0.05)';
+                ctx.beginPath();
+                ctx.ellipse(c.x, c.y, c.w / 2, c.h / 2, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.ellipse(c.x - c.w * 0.3, c.y - c.h * 0.2, c.w * 0.3, c.h * 0.5, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.ellipse(c.x + c.w * 0.3, c.y - c.h * 0.1, c.w * 0.25, c.h * 0.4, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            });
+
+            // Ground
+            ctx.fillStyle = '#1a4a2a';
+            ctx.fillRect(0, groundY, W, H - groundY);
+            ctx.fillStyle = '#2d6a3a';
+            ctx.fillRect(0, groundY + 2, W, 3);
+
+            // Birds
+            birds.forEach(b => {
+                const wingY = Math.sin(b.wingAngle) * 6;
+                ctx.shadowColor = '#00000044';
+                ctx.shadowBlur = 10;
+                ctx.fillStyle = ['#2d2d2d', '#4a3a2a', '#3a3a4a'][b.type];
+                ctx.beginPath();
+                ctx.ellipse(b.x + b.w / 2, b.y + b.h / 2, b.w / 2, b.h / 2.5, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = ['#3a3a3a', '#5a4a3a', '#4a4a5a'][b.type];
+                ctx.beginPath();
+                ctx.moveTo(b.x + b.w * 0.2, b.y + b.h * 0.2);
+                ctx.quadraticCurveTo(b.x + b.w * 0.1, b.y - b.h * 0.3 + wingY, b.x + b.w * 0.6, b.y + b.h * 0.1);
+                ctx.fill();
+
+                ctx.beginPath();
+                ctx.moveTo(b.x + b.w * 0.2, b.y + b.h * 0.8);
+                ctx.quadraticCurveTo(b.x + b.w * 0.1, b.y + b.h * 1.3 + wingY, b.x + b.w * 0.6, b.y + b.h * 0.9);
+                ctx.fill();
+
+                ctx.fillStyle = '#ff6b6b';
+                ctx.shadowBlur = 0;
+                ctx.beginPath();
+                ctx.arc(b.x + b.w * 0.7, b.y + b.h * 0.4, 3, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = '#fff';
+                ctx.beginPath();
+                ctx.arc(b.x + b.w * 0.72, b.y + b.h * 0.35, 1.2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            });
+
+            // Player Airplane
+            const px = player.x,
+                py = player.y,
+                pw = player.w,
+                ph = player.h;
+
+            ctx.shadowColor = '#4fc3f766';
+            ctx.shadowBlur = 30;
+
+            ctx.fillStyle = '#e3f2fd';
+            ctx.beginPath();
+            ctx.ellipse(px + pw / 2, py + ph / 2, pw / 2, ph / 2.2, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = '#4fc3f7';
+            ctx.shadowBlur = 0;
+            ctx.beginPath();
+            ctx.ellipse(px + pw * 0.75, py + ph * 0.35, 10, 7, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = '#bbdefb';
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = '#4fc3f744';
+            ctx.beginPath();
+            ctx.moveTo(px + pw * 0.2, py + ph * 0.2);
+            ctx.lineTo(px + pw * 0.5, py - ph * 0.3);
+            ctx.lineTo(px + pw * 0.7, py + ph * 0.1);
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.moveTo(px + pw * 0.2, py + ph * 0.8);
+            ctx.lineTo(px + pw * 0.5, py + ph * 1.3);
+            ctx.lineTo(px + pw * 0.7, py + ph * 0.9);
+            ctx.fill();
+
+            ctx.fillStyle = '#90caf9';
+            ctx.beginPath();
+            ctx.moveTo(px + pw * 0.05, py + ph * 0.3);
+            ctx.lineTo(px - pw * 0.15, py + ph * 0.1);
+            ctx.lineTo(px + pw * 0.05, py + ph * 0.5);
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.moveTo(px + pw * 0.05, py + ph * 0.7);
+            ctx.lineTo(px - pw * 0.15, py + ph * 0.9);
+            ctx.lineTo(px + pw * 0.05, py + ph * 0.5);
+            ctx.fill();
+
+            ctx.shadowBlur = 40;
+            ctx.shadowColor = '#4fc3f788';
+            ctx.fillStyle = '#4fc3f7';
+            ctx.beginPath();
+            ctx.arc(px + pw * 0.1, py + ph / 2, 6, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.shadowBlur = 20;
+            ctx.fillStyle = 'rgba(255,255,255,0.3)';
+            const propAngle = frameCount * 0.3;
+            ctx.save();
+            ctx.translate(px + pw * 0.05, py + ph / 2);
+            ctx.rotate(propAngle);
+            ctx.fillRect(-2, -12, 4, 24);
+            ctx.fillRect(-12, -2, 24, 4);
+            ctx.restore();
+
+            ctx.shadowBlur = 0;
+
+            // Score
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 24px "Segoe UI", sans-serif';
+            ctx.shadowColor = '#00000088';
+            ctx.shadowBlur = 12;
+            ctx.fillText(`✈️ ${score}`, 16, 44);
+
+            if (currentUser) {
+                ctx.font = '14px "Segoe UI", sans-serif';
+                ctx.fillStyle = '#b5d6e8';
+                ctx.fillText(`👤 ${currentUser}`, 16, 70);
+            }
+
+            ctx.font = '13px "Segoe UI", sans-serif';
+            ctx.fillStyle = 'rgba(255,255,255,0.5)';
+            ctx.fillText(`⚡ ${speed.toFixed(1)}`, 16, 92);
+
+            ctx.shadowBlur = 0;
+
+            if (frameCount < 120) {
+                ctx.fillStyle = 'rgba(255,255,255,0.3)';
+                ctx.font = '16px "Segoe UI", sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('🖱️ Tap or Press Space to Fly', W / 2, H - 30);
+                ctx.textAlign = 'left';
+            }
+        }
+
+        // ---------- FLAP ----------
+        function flap() {
+            if (!gameRunning || gameOver) return;
+            player.vy = FLAP_FORCE;
+        }
+
+        // ---------- EVENT LISTENERS ----------
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault();
+                if (gameScreen.classList.contains('active')) flap();
+            }
+            if (e.key === 'Enter') {
+                if (authScreen.classList.contains('active')) {
+                    if (isLoginMode) login();
+                    else signup();
+                }
+            }
+        });
+
+        canvas.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (gameScreen.classList.contains('active')) flap();
+        });
+
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            if (gameScreen.classList.contains('active')) flap();
+        }, { passive: false });
+
+        // Restart
+        $('restartBtn').addEventListener('click', startGame);
+        $('restartBtn').addEventListener('touchend', (e) => {
+            e.preventDefault();
+            startGame();
+        });
+
+        // Logout
+        $('logoutBtn').addEventListener('click', logout);
+        $('logoutBtn').addEventListener('touchend', (e) => {
+            e.preventDefault();
+            logout();
+        });
+
+        // Auth buttons
+        $('loginBtn').addEventListener('click', login);
+        $('signupBtn').addEventListener('click', signup);
+        $('guestBtn').addEventListener('click', guestLogin);
+        $('adminBtn').addEventListener('click', adminLogin);
+
+        // Toggle
+        toggleAuth.addEventListener('click', () => {
+            isLoginMode = !isLoginMode;
+            toggleAuth.textContent = isLoginMode ? 'Sign Up' : 'Login';
+            $('loginBtn').textContent = isLoginMode ? '🔑 Login' : '📝 Sign Up';
+            $('signupBtn').textContent = isLoginMode ? '📝 Sign Up' : '🔑 Login';
+            authMsg.textContent = '';
+        });
+
+        // Admin
+        $('adminResetBtn').addEventListener('click html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
